@@ -19,15 +19,13 @@ cd ..
 dart pub publish --dry-run
 ```
 
-The publish dry-run currently exits with the known missing `homepage` or
-`repository` warning. Treat any additional package warning or error as a
-release blocker.
+The publish dry-run must exit with `Package has 0 warnings`. Treat any package
+warning or error as a release blocker.
 
 Tagged releases use `.github/workflows/publish.yml`, which calls the official
-`dart-lang/setup-dart` pub.dev publishing workflow. Before pushing `vX.Y.Z`,
-configure pub.dev automated publishing for the real GitHub repository, make the
-tag match `pubspec.yaml`, and keep a matching `## X.Y.Z` entry in
-`CHANGELOG.md`.
+`dart-lang/setup-dart` pub.dev publishing workflow after the package exists on
+pub.dev. Before pushing `vX.Y.Z`, follow `doc/releasing.md`, make the tag match
+`pubspec.yaml`, and keep a matching `## X.Y.Z` entry in `CHANGELOG.md`.
 
 Animation goldens should use raw `.motion` files, not WebP/APNG bytes:
 

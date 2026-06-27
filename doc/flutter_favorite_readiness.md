@@ -34,11 +34,12 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   golden assertion timing, Linux, macOS, Windows, Android, and iOS example
   build smoke checks, and `v*` release tag checks against `pubspec.yaml` and
   `CHANGELOG.md` versions.
-- CD is configured in `.github/workflows/publish.yml` for `vX.Y.Z` tags. It
-  checks the tag against `pubspec.yaml`/`CHANGELOG.md`, runs package and
-  example verification including package archive dry-run, web build, and the
-  benchmark JSON validator, then delegates publishing to the official
-  `dart-lang/setup-dart` pub.dev workflow.
+- CD is configured in `.github/workflows/publish.yml` for `vX.Y.Z` tags after
+  the first manual pub.dev release and GitHub OIDC setup. It checks the tag
+  against `pubspec.yaml`/`CHANGELOG.md`, runs package and example verification
+  including package archive dry-run, web build, and the benchmark JSON
+  validator, then delegates publishing to the official `dart-lang/setup-dart`
+  pub.dev workflow. `doc/releasing.md` records the first-release sequence.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
 - Public GitHub CI is green on `main` for formatting, analysis, package tests,
@@ -66,7 +67,8 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   error text, but `webpinfo` is still required. The pubspec thumbnail is PNG,
   and removing it would make the package presentation worse, so keep it.
 - The package is not yet published from a verified publisher, and pub.dev
-  automated publishing still needs to be linked to the real GitHub repository.
+  automated publishing still needs the first manual package publish plus the
+  GitHub repository/tag-pattern link in pub.dev Admin.
 - There is no public GitHub release tag matching the pub.dev version.
 - Runtime performance has a pure-Dart WebP encoder bottleneck. Current default
   WebP export settings use changed-frame trimming for captured full-snapshot

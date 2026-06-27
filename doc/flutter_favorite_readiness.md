@@ -45,7 +45,7 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 - `git status --short --branch` is clean on `main`, with the local branch
   tracking `origin/main`.
 - `pana . --no-warning` on Flutter 3.44.1 / Dart 3.12.1 currently scores
-  130/160 locally on Windows: static analysis, dependencies, platform support,
+  140/160 locally on Windows: static analysis, dependencies, platform support,
   README, CHANGELOG, license, and example are green.
 - `dart doc --dry-run` fails locally with the same `RangeError` in
   `DocumentationComment._stripDocImports` that `pana` reports, so the lost

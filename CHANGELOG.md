@@ -40,7 +40,8 @@
   coverage plus JSON validation for WebP/APNG export timing, size snapshots,
   non-identifying Dart/OS metadata, WebP changed-rectangle performance
   regression checks, APNG transparent-trim performance regression checks, and
-  raw `.motion` golden encode/decode/compare timing.
+  raw `.motion` golden encode/decode/compare timing with encode/compare
+  regression guards.
 * Added real motion export screenshots: an animated WebP for README review and
   a static PNG thumbnail for pub.dev package presentation.
 * Improved package hygiene with archive ignores for generated Flutter files,

@@ -37,7 +37,7 @@ void main(List<String> args) {
   if ((goldenBytes / 1024 - goldenKibibytes).abs() > 0.001) {
     _fail('KiB mismatch for .motion golden.');
   }
-  _nonNegativeInt(golden, 'encodeMicros');
+  final goldenEncodeMicros = _nonNegativeInt(golden, 'encodeMicros');
   _nonNegativeInt(golden, 'decodeMicros');
   final goldenCompareMicros = _nonNegativeInt(golden, 'compareMicros');
 
@@ -107,6 +107,12 @@ void main(List<String> args) {
     smaller: 'APNG transparent trim',
     larger: 'APNG full canvas',
     metric: 'encodeMicros',
+  );
+  _expectValueAtMost(
+    value: goldenEncodeMicros,
+    valueName: '.motion encodeMicros',
+    max: _positiveInt(rows['APNG transparent trim']!, 'encodeMicros'),
+    maxName: 'APNG transparent trim encodeMicros',
   );
   _expectValueAtMost(
     value: goldenCompareMicros,

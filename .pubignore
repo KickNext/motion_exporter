@@ -1,0 +1,13 @@
+.dart_tool/
+.idea/
+build/
+doc/api/
+*.iml
+example/.dart_tool/
+example/build/
+example/output/
+example/ios/Flutter/Generated.xcconfig
+example/ios/Flutter/flutter_export_environment.sh
+example/ios/Flutter/ephemeral/
+example/macos/Flutter/ephemeral/
+example/windows/flutter/ephemeral/

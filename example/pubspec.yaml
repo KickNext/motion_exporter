@@ -1,0 +1,23 @@
+name: motion_exporter_example
+description: "Demonstrates recording a transparent Flutter animation to WebP."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.1
+
+dependencies:
+  cupertino_icons: ^1.0.9
+  flutter:
+    sdk: flutter
+  image: ^4.9.1
+  motion_exporter:
+    path: ..
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

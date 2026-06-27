@@ -1,0 +1,39 @@
+name: motion_exporter
+description: "Record animated Flutter widgets and export transparent motion formats."
+version: 0.0.1
+topics:
+  - flutter
+  - animation
+  - apng
+  - webp
+  - export
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+screenshots:
+  - description: Transparent Flutter motion export preview.
+    path: screenshots/transparent_orbit.png
+
+environment:
+  sdk: ^3.12.1
+  flutter: ">=3.35.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image: ^4.9.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:

@@ -1,0 +1,188 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Check release tag matches package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          version="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
+          expected_ref="refs/tags/v$version"
+          if [ "$GITHUB_REF" != "$expected_ref" ]; then
+            echo "Release tag $GITHUB_REF does not match pubspec version $version." >&2
+            echo "Expected $expected_ref." >&2
+            exit 1
+          fi
+          if ! grep -Fx "## $version" CHANGELOG.md >/dev/null; then
+            echo "CHANGELOG.md is missing a ## $version release entry." >&2
+            exit 1
+          fi
+
+      - name: Install package dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze package
+        run: flutter analyze
+
+      - name: Test package
+        run: flutter test test/motion_exporter_test.dart
+
+      - name: Install example dependencies
+        working-directory: example
+        run: flutter pub get
+
+      - name: Analyze example
+        working-directory: example
+        run: flutter analyze
+
+      - name: Build example web
+        working-directory: example
+        run: flutter build web --release --output build/web
+
+      - name: Build example WebAssembly
+        working-directory: example
+        run: flutter build web --wasm --release --output build/web_wasm
+
+      - name: Test example app
+        working-directory: example
+        run: flutter test test/widget_test.dart
+
+      - name: Test example golden workflow
+        working-directory: example
+        run: flutter test test/motion_golden_workflow_test.dart
+
+      - name: Test generated WebP demo
+        working-directory: example
+        run: flutter test test/generate_120fps_demo_test.dart
+
+      - name: Smoke export benchmark
+        working-directory: example
+        run: |
+          MOTION_EXPORTER_BENCHMARK_JSON=output/benchmark.json flutter test tool/benchmark_exports.dart --reporter expanded
+          test -s output/benchmark.json
+          dart run tool/validate_benchmark_json.dart output/benchmark.json
+
+      - name: Validate package archive
+        run: |
+          set +e
+          output="$(dart pub publish --dry-run 2>&1)"
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+          printf '%s\n' "$output" | grep -F 'strongly recommended to include a "homepage" or "repository" field' >/dev/null
+          printf '%s\n' "$output" | grep -F 'Package has 1 warning.' >/dev/null
+
+  linux_desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Linux desktop dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+
+      - name: Build example Linux desktop
+        working-directory: example
+        run: |
+          flutter config --enable-linux-desktop
+          flutter pub get
+          flutter build linux --release
+
+  macos_desktop:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Build example macOS desktop
+        working-directory: example
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
+          flutter build macos --release
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Build example Android debug APK
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build apk --debug
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Build example iOS simulator app
+        working-directory: example
+        run: |
+          flutter pub get
+          flutter build ios --simulator
+
+  windows_desktop:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Build example Windows desktop
+        working-directory: example
+        run: |
+          flutter config --enable-windows-desktop
+          flutter pub get
+          flutter build windows --release

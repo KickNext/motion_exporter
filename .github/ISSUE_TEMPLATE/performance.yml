@@ -1,0 +1,60 @@
+name: Performance report
+description: Report slow capture, encoding, large output, or a regression.
+labels: ["performance"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is slower or larger than expected?
+    validations:
+      required: true
+  - type: textarea
+    id: benchmark
+    attributes:
+      label: Benchmark JSON
+      description: Paste output written with `MOTION_EXPORTER_BENCHMARK_JSON`, including WebP/APNG rows and `.motion` golden timings.
+      render: json
+    validations:
+      required: false
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Capture scenario
+      description: Widget size, pixel ratio, FPS, duration, frame count, export format, and trim settings.
+    validations:
+      required: true
+  - type: input
+    id: flutter
+    attributes:
+      label: Flutter version
+      placeholder: "flutter --version"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - Web
+        - Windows
+        - macOS
+        - Linux
+        - Test/CI only
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected performance
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual performance
+    validations:
+      required: true

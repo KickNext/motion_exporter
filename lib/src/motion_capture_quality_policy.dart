@@ -10,6 +10,9 @@ enum MotionCaptureQualityFailure {
 
   /// The effective sampled frame rate was below the configured policy ratio.
   belowTargetFrameRate,
+
+  /// The retained raw RGBA clip exceeded the configured memory budget.
+  retainedMemoryBudgetExceeded,
 }
 
 /// Quality policy applied before encoding a captured [MotionClip].
@@ -23,8 +26,10 @@ class MotionCaptureQualityPolicy {
     this.requireDiagnostics = false,
     this.allowSkippedFrames = true,
     this.minimumTargetFrameRateRatio = 0,
+    this.maxRetainedBytes,
   }) : assert(minimumTargetFrameRateRatio >= 0),
-       assert(minimumTargetFrameRateRatio <= 1);
+       assert(minimumTargetFrameRateRatio <= 1),
+       assert(maxRetainedBytes == null || maxRetainedBytes > 0);
 
   /// Requires diagnostics and zero skipped frames.
   ///
@@ -33,15 +38,22 @@ class MotionCaptureQualityPolicy {
   /// export.
   const MotionCaptureQualityPolicy.noSkippedFrames({
     bool requireDiagnostics = true,
-  }) : this(requireDiagnostics: requireDiagnostics, allowSkippedFrames: false);
+    int? maxRetainedBytes,
+  }) : this(
+         requireDiagnostics: requireDiagnostics,
+         allowSkippedFrames: false,
+         maxRetainedBytes: maxRetainedBytes,
+       );
 
   /// Requires diagnostics, zero skipped frames, and near-target sampled FPS.
   const MotionCaptureQualityPolicy.strict({
     double minimumTargetFrameRateRatio = 0.95,
+    int? maxRetainedBytes,
   }) : this(
          requireDiagnostics: true,
          allowSkippedFrames: false,
          minimumTargetFrameRateRatio: minimumTargetFrameRateRatio,
+         maxRetainedBytes: maxRetainedBytes,
        );
 
   /// Whether missing diagnostics should fail validation.
@@ -56,13 +68,21 @@ class MotionCaptureQualityPolicy {
   /// least 95% of the requested recorder frame rate.
   final double minimumTargetFrameRateRatio;
 
+  /// Maximum retained raw RGBA bytes allowed before export encoding.
+  ///
+  /// Use [MotionCaptureEstimate.rawBytes] before recording to choose this
+  /// budget, then enforce it against actual [WebpCaptureDiagnostics.retainedBytes]
+  /// before APNG/WebP encoding starts.
+  final int? maxRetainedBytes;
+
   /// Returns every quality failure for [diagnostics].
   List<MotionCaptureQualityFailure> failuresFor(
     MotionCaptureDiagnostics? diagnostics,
   ) {
     final failures = <MotionCaptureQualityFailure>[];
+    final maxBytes = maxRetainedBytes;
     if (diagnostics == null) {
-      if (requireDiagnostics) {
+      if (requireDiagnostics || maxBytes != null) {
         failures.add(MotionCaptureQualityFailure.missingDiagnostics);
       }
       return List<MotionCaptureQualityFailure>.unmodifiable(failures);
@@ -73,6 +93,9 @@ class MotionCaptureQualityPolicy {
     if (minimumTargetFrameRateRatio > 0 &&
         diagnostics.targetFrameRateRatio < minimumTargetFrameRateRatio) {
       failures.add(MotionCaptureQualityFailure.belowTargetFrameRate);
+    }
+    if (maxBytes != null && diagnostics.retainedBytes > maxBytes) {
+      failures.add(MotionCaptureQualityFailure.retainedMemoryBudgetExceeded);
     }
     return List<MotionCaptureQualityFailure>.unmodifiable(failures);
   }
@@ -126,5 +149,7 @@ String _captureQualityFailureLabel(MotionCaptureQualityFailure failure) {
     MotionCaptureQualityFailure.skippedFrames => 'skipped frames',
     MotionCaptureQualityFailure.belowTargetFrameRate =>
       'below target frame rate',
+    MotionCaptureQualityFailure.retainedMemoryBudgetExceeded =>
+      'retained memory budget exceeded',
   };
 }

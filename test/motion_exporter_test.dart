@@ -928,6 +928,40 @@ void main() {
     );
   });
 
+  test('capture quality policy can reject retained raw memory', () async {
+    const policy = MotionCaptureQualityPolicy(maxRetainedBytes: 16);
+    final diagnostics = _captureDiagnostics(capturedFrames: 5);
+
+    expect(policy.failuresFor(null), <MotionCaptureQualityFailure>[
+      MotionCaptureQualityFailure.missingDiagnostics,
+    ]);
+    expect(policy.failuresFor(diagnostics), <MotionCaptureQualityFailure>[
+      MotionCaptureQualityFailure.retainedMemoryBudgetExceeded,
+    ]);
+
+    await expectLater(
+      const MotionClipEncoder(
+        useBackgroundIsolate: false,
+        qualityPolicy: policy,
+      ).encode(_singlePixelClip(), diagnostics: diagnostics),
+      throwsA(
+        isA<MotionCaptureQualityException>()
+            .having(
+              (error) => error.failures,
+              'failures',
+              <MotionCaptureQualityFailure>[
+                MotionCaptureQualityFailure.retainedMemoryBudgetExceeded,
+              ],
+            )
+            .having(
+              (error) => error.toString(),
+              'message',
+              contains('retained memory budget exceeded'),
+            ),
+      ),
+    );
+  });
+
   test('strict capture quality policy accepts clean diagnostics', () async {
     final result = await const MotionClipEncoder(
       useBackgroundIsolate: false,

@@ -3,9 +3,10 @@
 * Initial release as `motion_exporter`.
 * Added widget motion capture APIs: `MotionRecorder`,
   `MotionRecorderController`, `MotionExporterOverlay`, capture diagnostics,
-  `MotionRecording`, raw-memory estimates, capture quality policies, and typed
-  export errors. `MotionRecorderController.stopWebp` names the direct-WebP
-  shortcut while `stopCapture` and `stopExport` remain the format-neutral paths.
+  `MotionRecording`, raw-memory estimates, capture quality policies with
+  retained-byte budget enforcement, and typed export errors.
+  `MotionRecorderController.stopWebp` names the direct-WebP shortcut while
+  `stopCapture` and `stopExport` remain the format-neutral paths.
 * Added export APIs for transparent animated WebP and APNG, including
   background-isolate encoding, encoded-file validation, WebP changed-rectangle
   trimming by default for captured clips and streamed WebP file writes, APNG

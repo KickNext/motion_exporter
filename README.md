@@ -205,9 +205,11 @@ Set encoder policy once on the engine when the workflow needs stricter export
 rules:
 
 ```dart
-const engine = MotionExportEngine(
+final engine = MotionExportEngine(
   encoder: MotionClipEncoder(
-    qualityPolicy: MotionCaptureQualityPolicy.noSkippedFrames(),
+    qualityPolicy: MotionCaptureQualityPolicy.noSkippedFrames(
+      maxRetainedBytes: estimate.rawBytes,
+    ),
   ),
 );
 final result = await engine.stopRecording(controller);

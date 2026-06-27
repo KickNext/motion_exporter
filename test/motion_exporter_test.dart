@@ -2175,6 +2175,7 @@ void main() {
     expect(recording.duration, const Duration(milliseconds: 200));
     expect(recording.byteLength, file.lengthSync());
     expect(recording.inspect().frameCount, 2);
+    expect(recording.validateEncodedFile().isValid, isTrue);
     final frameControls = _webpFrameControls(bytes);
     expect(frameControls.map((control) => control.durationMs), <int>[80, 120]);
     expect(frameControls.last.width, 2);
@@ -2239,6 +2240,7 @@ void main() {
     expect(recording.duration, clip.duration);
     expect(recording.byteLength, file.lengthSync());
     expect(recording.inspect().isAnimated, isTrue);
+    expect(recording.validateEncodedFile().isValid, isTrue);
     expect(img.WebPDecoder(file.readAsBytesSync()).numFrames(), 2);
   });
 

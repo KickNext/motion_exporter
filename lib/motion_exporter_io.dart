@@ -127,6 +127,23 @@ class WebpAnimationFileRecording {
       bytes: file.readAsBytesSync(),
     );
   }
+
+  /// Validates the written file against this recording's metadata.
+  MotionExportValidation validateEncodedFile({
+    Duration durationTolerance = const Duration(milliseconds: 1),
+    bool requireAlpha = true,
+  }) {
+    return MotionExportValidation.forMetadata(
+      format: MotionExportFormat.webp,
+      width: width,
+      height: height,
+      frameCount: frameCount,
+      duration: duration,
+      inspection: inspect(),
+      durationTolerance: durationTolerance,
+      requireAlpha: requireAlpha,
+    );
+  }
 }
 
 /// Writes [clip] as an animated WebP file without retaining encoded bytes.

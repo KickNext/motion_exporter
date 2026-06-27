@@ -92,7 +92,7 @@ enum MotionExportValidationFailure {
   final String label;
 }
 
-/// Result of checking encoded bytes against a [MotionExportResult].
+/// Result of checking encoded bytes against expected export metadata.
 class MotionExportValidation {
   const MotionExportValidation._({
     required this.inspection,
@@ -111,6 +111,29 @@ class MotionExportValidation {
     Duration durationTolerance = _defaultExportValidationDurationTolerance,
     bool requireAlpha = true,
   }) {
+    return MotionExportValidation.forMetadata(
+      format: result.format,
+      width: result.width,
+      height: result.height,
+      frameCount: result.frameCount,
+      duration: result.duration,
+      inspection: inspection ?? result.inspect(),
+      durationTolerance: durationTolerance,
+      requireAlpha: requireAlpha,
+    );
+  }
+
+  /// Validates parsed export metadata against expected export values.
+  factory MotionExportValidation.forMetadata({
+    required MotionExportFormat format,
+    required int width,
+    required int height,
+    required int frameCount,
+    required Duration duration,
+    required MotionExportInspection inspection,
+    Duration durationTolerance = _defaultExportValidationDurationTolerance,
+    bool requireAlpha = true,
+  }) {
     if (durationTolerance < Duration.zero) {
       throw ArgumentError.value(
         durationTolerance,
@@ -119,31 +142,30 @@ class MotionExportValidation {
       );
     }
 
-    final actual = inspection ?? result.inspect();
     final failures = <MotionExportValidationFailure>[];
 
-    if (actual.format != result.format) {
+    if (inspection.format != format) {
       failures.add(MotionExportValidationFailure.formatMismatch);
     }
-    if (actual.width != result.width || actual.height != result.height) {
+    if (inspection.width != width || inspection.height != height) {
       failures.add(MotionExportValidationFailure.sizeMismatch);
     }
-    if (actual.frameCount != result.frameCount) {
+    if (inspection.frameCount != frameCount) {
       failures.add(MotionExportValidationFailure.frameCountMismatch);
     }
-    if (_durationDifference(actual.duration, result.duration) >
+    if (_durationDifference(inspection.duration, duration) >
         durationTolerance) {
       failures.add(MotionExportValidationFailure.durationMismatch);
     }
-    if (!actual.hasAnimationContainer) {
+    if (!inspection.hasAnimationContainer) {
       failures.add(MotionExportValidationFailure.missingAnimationContainer);
     }
-    if (requireAlpha && !actual.hasAlpha) {
+    if (requireAlpha && !inspection.hasAlpha) {
       failures.add(MotionExportValidationFailure.missingAlpha);
     }
 
     return MotionExportValidation._(
-      inspection: actual,
+      inspection: inspection,
       failures: List<MotionExportValidationFailure>.unmodifiable(failures),
     );
   }

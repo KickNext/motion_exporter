@@ -460,6 +460,7 @@ final recording = await writeWebpAnimationFile(
   file: File('build/preview.webp'),
   clip: clip,
 );
+recording.validateEncodedFile().throwIfInvalid();
 ```
 
 Use `WebpAnimationFileWriter` directly only when frames arrive incrementally:

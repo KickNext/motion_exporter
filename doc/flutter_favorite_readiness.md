@@ -15,6 +15,8 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   diagnostics.
 - `pubspec.yaml` declares a static PNG package thumbnail, while README keeps
   the animated WebP export artifact for human review.
+- `pubspec.yaml` points `homepage`, `repository`, and `issue_tracker` to the
+  public GitHub repository: https://github.com/KickNext/motion_exporter
 - `pubspec.yaml` explicitly declares Android, iOS, Linux, macOS, web, and
   Windows support for pub.dev platform metadata.
 - Root package gate is green locally:
@@ -39,10 +41,9 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   `dart-lang/setup-dart` pub.dev workflow.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
-- `dart pub publish --dry-run` packages successfully and reports only the
-  missing `homepage`/`repository` warning.
-- `git status --short --branch` is clean on `main` after the initial local
-  baseline commit.
+- `dart pub publish --dry-run` packages successfully with no warnings locally.
+- `git status --short --branch` is clean on `main`, with the local branch
+  tracking `origin/main`.
 - `pana . --no-warning` on Flutter 3.44.1 / Dart 3.12.1 currently scores
   130/160 locally on Windows: static analysis, dependencies, platform support,
   README, CHANGELOG, license, and example are green.
@@ -53,8 +54,6 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 
 ## Known blockers
 
-- `pubspec.yaml` has no `repository` or `homepage`; `dart pub publish --dry-run`
-  warns until the real public URL exists.
 - `dartdoc` 9.0.4/9.0.5 currently crashes while precaching Flutter SDK
   comments that use `@docImport`. This costs the dartdoc-comments score even
   though package analysis is clean.

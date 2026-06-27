@@ -1,5 +1,7 @@
 # motion_exporter
 
+[![CI](https://github.com/KickNext/motion_exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/KickNext/motion_exporter/actions/workflows/ci.yml)
+
 `motion_exporter` records an animated Flutter widget subtree and exports motion
 formats with transparent pixels preserved.
 

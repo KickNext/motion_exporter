@@ -41,6 +41,10 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   `dart-lang/setup-dart` pub.dev workflow.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
+- Public GitHub CI is green on `main` for formatting, analysis, package tests,
+  example web/WebAssembly, raw golden workflow, benchmark validation, package
+  archive dry-run, Linux, macOS, Windows, Android, and iOS smoke builds:
+  https://github.com/KickNext/motion_exporter/actions/runs/28303973278
 - `dart pub publish --dry-run` packages successfully with no warnings locally.
 - `git status --short --branch` is clean on `main`, with the local branch
   tracking `origin/main`.
@@ -67,6 +71,3 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 - Runtime performance has a pure-Dart WebP encoder bottleneck. Current default
   WebP export settings use changed-frame trimming for captured full-snapshot
   clips, but a native/libwebp backend would be the next large performance step.
-- macOS and iOS compatibility are covered by configured CI smoke builds, but
-  those jobs still need to pass on the real GitHub repository before claiming
-  full Apple platform release confidence.

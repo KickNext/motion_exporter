@@ -1,9 +1,10 @@
 # Flutter Favorite readiness
 
 This package is aiming for Flutter Favorite quality, not merely a green local
-build. The public Flutter Favorite metrics emphasize package score, permissive
-license, matching GitHub tags, feature completeness, verified publisher, docs,
-examples, API quality, runtime behavior, and dependency quality:
+build. Checked against the Flutter 3.44 documentation, the public Flutter
+Favorite metrics emphasize package score, permissive license, matching GitHub
+tags, feature completeness, verified publisher, docs, examples, API quality,
+runtime behavior, and dependency quality:
 https://docs.flutter.dev/packages-and-plugins/favorites
 
 ## Current evidence
@@ -40,20 +41,27 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   checklist aligned with the local CI gate.
 - `dart pub publish --dry-run` packages successfully and reports only the
   missing `homepage`/`repository` warning.
-- `pana . --no-warning` currently scores 130/160 locally on Windows: static
-  analysis, dependencies, platform support, README, CHANGELOG, license, and
-  example are green.
+- `git status --short --branch` is clean on `main` after the initial local
+  baseline commit.
+- `pana . --no-warning` on Flutter 3.44.1 / Dart 3.12.1 currently scores
+  130/160 locally on Windows: static analysis, dependencies, platform support,
+  README, CHANGELOG, license, and example are green.
+- `dart doc --dry-run` fails locally with the same `RangeError` in
+  `DocumentationComment._stripDocImports` that `pana` reports, so the lost
+  dartdoc score is reproducible outside `pana`. Upstream tracking issue:
+  https://github.com/dart-lang/dartdoc/issues/4180
 
 ## Known blockers
 
 - `pubspec.yaml` has no `repository` or `homepage`; `dart pub publish --dry-run`
   warns until the real public URL exists.
-- `dartdoc` 9.0.5, as invoked by `pana`, currently crashes while precaching
-  Flutter SDK `animation.dart` docs with `@docImport` offsets. This costs the
-  dartdoc-comments score even though package analysis is clean.
-- Local Windows `pana` cannot validate screenshots without WebP CLI tools
-  (`webpinfo`, `cwebp`, `gif2webp`). The pubspec thumbnail is PNG, but the
-  scorer still tries those converters when screenshots are present.
+- `dartdoc` 9.0.4/9.0.5 currently crashes while precaching Flutter SDK
+  comments that use `@docImport`. This costs the dartdoc-comments score even
+  though package analysis is clean.
+- Local Windows `pana` cannot fully validate screenshots without WebP CLI
+  tools. Adding the cached `cwebp.exe` to `PATH` reduces the local screenshot
+  error text, but `webpinfo` is still required. The pubspec thumbnail is PNG,
+  and removing it would make the package presentation worse, so keep it.
 - The package is not yet published from a verified publisher, and pub.dev
   automated publishing still needs to be linked to the real GitHub repository.
 - There is no public GitHub release tag matching the pub.dev version.

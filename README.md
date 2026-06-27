@@ -176,7 +176,8 @@ final estimate = MotionCaptureEstimate.forWidget(
   duration: const Duration(seconds: 2),
   options: options,
 );
-if (!estimate.fitsRawMemoryBudget(mebibytes: 128)) {
+const maxRetainedBytes = 128 * 1024 * 1024;
+if (!estimate.fitsRawByteBudget(bytes: maxRetainedBytes)) {
   throw StateError(
     'Capture is too large: ${estimate.rawMebibytes.toStringAsFixed(1)} MiB',
   );
@@ -208,7 +209,7 @@ rules:
 final engine = MotionExportEngine(
   encoder: MotionClipEncoder(
     qualityPolicy: MotionCaptureQualityPolicy.noSkippedFrames(
-      maxRetainedBytes: estimate.rawBytes,
+      maxRetainedBytes: maxRetainedBytes,
     ),
   ),
 );

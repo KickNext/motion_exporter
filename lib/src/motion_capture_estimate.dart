@@ -103,6 +103,14 @@ class MotionCaptureEstimate {
   }
 
   /// Whether [rawBytes] fits within a raw-memory budget.
+  bool fitsRawByteBudget({required int bytes}) {
+    if (bytes <= 0) {
+      throw ArgumentError.value(bytes, 'bytes', 'Budget must be positive.');
+    }
+    return rawBytes <= bytes;
+  }
+
+  /// Whether [rawBytes] fits within a raw-memory budget in MiB.
   bool fitsRawMemoryBudget({int mebibytes = 256}) {
     if (mebibytes <= 0) {
       throw ArgumentError.value(
@@ -111,7 +119,7 @@ class MotionCaptureEstimate {
         'Budget must be positive.',
       );
     }
-    return rawBytes <= mebibytes * 1024 * 1024;
+    return fitsRawByteBudget(bytes: mebibytes * 1024 * 1024);
   }
 }
 

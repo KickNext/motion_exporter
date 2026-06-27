@@ -995,6 +995,8 @@ void main() {
     expect(estimate.rawBytes, 512 * 256 * 4 * 240);
     expect(estimate.rawMebibytes, closeTo(120, 0.0001));
     expect(estimate.frameInterval, const Duration(microseconds: 8333));
+    expect(estimate.fitsRawByteBudget(bytes: estimate.rawBytes), isTrue);
+    expect(estimate.fitsRawByteBudget(bytes: estimate.rawBytes - 1), isFalse);
     expect(estimate.fitsRawMemoryBudget(mebibytes: 120), isTrue);
     expect(estimate.fitsRawMemoryBudget(mebibytes: 119), isFalse);
 

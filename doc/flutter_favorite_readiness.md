@@ -44,7 +44,7 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 - Public GitHub CI is green on `main` for formatting, analysis, package tests,
   example web/WebAssembly, raw golden workflow, benchmark validation, package
   archive dry-run, Linux, macOS, Windows, Android, and iOS smoke builds:
-  https://github.com/KickNext/motion_exporter/actions/runs/28303973278
+  https://github.com/KickNext/motion_exporter/actions/workflows/ci.yml
 - `dart pub publish --dry-run` packages successfully with no warnings locally.
 - `git status --short --branch` is clean on `main`, with the local branch
   tracking `origin/main`.

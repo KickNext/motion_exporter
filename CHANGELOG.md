@@ -12,8 +12,9 @@
   background-isolate encoding, encoded-file validation, WebP changed-rectangle
   trimming by default for captured clips and streamed WebP file writes, APNG
   rational high-FPS delays, cumulative WebP delay rounding, and direct WebP
-  animation chunk writing to avoid extra muxer allocations, shared ANMF frame
-  header writing, single-pass WebP frame-duration accumulation, 32-bit
+  animation chunk writing to avoid extra muxer allocations, a
+  `writeWebpAnimationFile` helper for file-backed clip exports, shared ANMF
+  frame header writing, single-pass WebP frame-duration accumulation, 32-bit
   changed-pixel and transparent-alpha scans, tiny streamed frame-header writes,
   and opt-in previous-frame reference retention for high-throughput streamed
   WebP exports with immutable RGBA buffers.

@@ -129,6 +129,31 @@ class WebpAnimationFileRecording {
   }
 }
 
+/// Writes [clip] as an animated WebP file without retaining encoded bytes.
+Future<WebpAnimationFileRecording> writeWebpAnimationFile({
+  required File file,
+  required MotionClip clip,
+  WebpAnimationOptions options = const WebpAnimationOptions(
+    trimChangedFrames: true,
+  ),
+}) async {
+  final writer = await WebpAnimationFileWriter.open(
+    file: file,
+    width: clip.width,
+    height: clip.height,
+    options: options,
+  );
+  try {
+    for (final frame in clip.frames) {
+      writer.addFrame(frame);
+    }
+    return await writer.close();
+  } catch (_) {
+    await writer._sink.close();
+    rethrow;
+  }
+}
+
 /// Reads a raw `.motion` animation golden from [file].
 Future<MotionClip> readMotionClipGolden(
   File file, {

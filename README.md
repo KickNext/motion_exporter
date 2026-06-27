@@ -456,6 +456,15 @@ caller will not mutate or reuse those bytes before the next frame is added, the
 streaming encoder can skip the defensive previous-frame copy:
 
 ```dart
+final recording = await writeWebpAnimationFile(
+  file: File('build/preview.webp'),
+  clip: clip,
+);
+```
+
+Use `WebpAnimationFileWriter` directly only when frames arrive incrementally:
+
+```dart
 final writer = await WebpAnimationFileWriter.open(
   file: File('build/preview.webp'),
   width: 512,

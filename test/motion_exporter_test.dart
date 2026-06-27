@@ -2182,6 +2182,66 @@ void main() {
     expect(img.WebPDecoder(bytes).numFrames(), 2);
   });
 
+  test('writes a motion clip directly to a streamed WebP file', () async {
+    final tempDir = Directory.systemTemp.createTempSync(
+      'motion_exporter_webp_clip_',
+    );
+    addTearDown(() {
+      if (tempDir.existsSync()) {
+        tempDir.deleteSync(recursive: true);
+      }
+    });
+
+    final clip = MotionClip(
+      frames: <MotionFrame>[
+        MotionFrame(
+          width: 4,
+          height: 4,
+          duration: const Duration(milliseconds: 80),
+          rgbaBytes: _rectFrameBytes(
+            width: 4,
+            height: 4,
+            x: 0,
+            y: 0,
+            rectWidth: 4,
+            rectHeight: 4,
+            color: <int>[255, 255, 255, 255],
+          ),
+        ),
+        MotionFrame(
+          width: 4,
+          height: 4,
+          duration: const Duration(milliseconds: 120),
+          rgbaBytes: _frameBytesWithPixel(
+            _rectFrameBytes(
+              width: 4,
+              height: 4,
+              x: 0,
+              y: 0,
+              rectWidth: 4,
+              rectHeight: 4,
+              color: <int>[255, 255, 255, 255],
+            ),
+            width: 4,
+            x: 3,
+            y: 2,
+            color: <int>[0, 143, 138, 255],
+          ),
+        ),
+      ],
+    );
+    final file = File('${tempDir.path}${Platform.pathSeparator}clip.webp');
+
+    final recording = await writeWebpAnimationFile(file: file, clip: clip);
+
+    expect(recording.file.path, file.path);
+    expect(recording.frameCount, clip.frameCount);
+    expect(recording.duration, clip.duration);
+    expect(recording.byteLength, file.lengthSync());
+    expect(recording.inspect().isAnimated, isTrue);
+    expect(img.WebPDecoder(file.readAsBytesSync()).numFrames(), 2);
+  });
+
   test('file writer closes file when open validation fails', () async {
     final tempDir = Directory.systemTemp.createTempSync(
       'motion_exporter_webp_open_',

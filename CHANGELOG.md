@@ -12,8 +12,9 @@
   rational high-FPS delays, cumulative WebP delay rounding, and direct WebP
   animation chunk writing to avoid extra muxer allocations, shared ANMF frame
   header writing, single-pass WebP frame-duration accumulation, 32-bit
-  changed-pixel and transparent-alpha scans, and tiny streamed frame-header
-  writes.
+  changed-pixel and transparent-alpha scans, tiny streamed frame-header writes,
+  and opt-in previous-frame reference retention for high-throughput streamed
+  WebP exports with immutable RGBA buffers.
 * Added deterministic rendering APIs: `MotionCanvasRecorder`,
   `MotionExportEngine.recordCanvasClip`, `MotionExportEngine.recordCanvas`,
   `MotionClip.withDuration`, and `MotionClip.withoutDuplicateFrames` for exact
@@ -31,8 +32,9 @@
   first differing frame, pixel, channel, and frame duration, plus an exact-match
   fast path for green golden checks and duplicate-frame collapse. `.motion`
   goldens use lossless RLE compression when it reduces file size while
-  remaining backward-compatible with raw `.motion` files. The README now leads
-  with a golden-first quick start, including PowerShell update commands.
+  remaining backward-compatible with raw `.motion` files, with a preallocated
+  RLE writer for lower CI encode overhead. The README now leads with a
+  golden-first quick start, including PowerShell update commands.
 * Added an interactive example app, deterministic 120 fps demo generation,
   encoded WebP preview playback, and an optional benchmark tool with CI smoke
   coverage plus JSON validation for WebP/APNG export timing, size snapshots,

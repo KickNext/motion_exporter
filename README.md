@@ -447,6 +447,27 @@ for large exports where keeping every frame in memory is unnecessary. Pass
 `WebpAnimationOptions()` explicitly when you prefer transparent-bound trimming
 for mostly transparent motion.
 
+For high-throughput file-backed exports, keep the safe default unless your
+capture pipeline owns immutable RGBA buffers after each `addFrame` call. If the
+caller will not mutate or reuse those bytes before the next frame is added, the
+streaming encoder can skip the defensive previous-frame copy:
+
+```dart
+final writer = await WebpAnimationFileWriter.open(
+  file: File('build/preview.webp'),
+  width: 512,
+  height: 512,
+  options: const WebpAnimationOptions(
+    trimChangedFrames: true,
+    previousFrameRetentionPolicy: WebpPreviousFrameRetentionPolicy.reference,
+  ),
+);
+```
+
+Use `WebpPreviousFrameRetentionPolicy.copy` when frames come from a reusable
+scratch buffer, an object pool, or any producer that might mutate pixels after
+`addFrame` returns.
+
 WebP frame delays are stored in whole milliseconds by the format. The encoder
 rounds against cumulative clip time instead of rounding each frame in isolation,
 so a two-second 120 fps clip is written as 160 frames at `8 ms` and 80 frames at

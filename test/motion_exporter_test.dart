@@ -1938,6 +1938,105 @@ void main() {
     expect(compositedFrames[1], frames[1].rgbaBytes);
   });
 
+  test('stream WebP copies previous frame bytes by default', () {
+    final firstBytes = _rectFrameBytes(
+      width: 4,
+      height: 4,
+      x: 0,
+      y: 0,
+      rectWidth: 4,
+      rectHeight: 4,
+      color: <int>[255, 255, 255, 255],
+    );
+    final secondBytes = _frameBytesWithPixel(
+      Uint8List.fromList(firstBytes),
+      width: 4,
+      x: 3,
+      y: 2,
+      color: <int>[0, 143, 138, 255],
+    );
+    final sink = _MemoryWebpAnimationSink();
+    final encoder = WebpAnimationStreamEncoder(sink: sink, width: 4, height: 4);
+
+    encoder.addFrame(
+      WebpFrame(
+        width: 4,
+        height: 4,
+        duration: const Duration(milliseconds: 80),
+        rgbaBytes: firstBytes,
+      ),
+    );
+    firstBytes.setRange(0, firstBytes.lengthInBytes, secondBytes);
+    encoder.addFrame(
+      WebpFrame(
+        width: 4,
+        height: 4,
+        duration: const Duration(milliseconds: 120),
+        rgbaBytes: secondBytes,
+      ),
+    );
+    encoder.close();
+
+    final bytes = sink.takeBytes();
+    final controls = _webpFrameControls(bytes);
+    expect(controls.last.width, 2);
+    expect(controls.last.height, 1);
+    expect(_composeAnimatedWebpFrames(bytes)[1], secondBytes);
+  });
+
+  test('stream WebP can retain previous frame bytes by reference', () {
+    final firstBytes = _rectFrameBytes(
+      width: 4,
+      height: 4,
+      x: 0,
+      y: 0,
+      rectWidth: 4,
+      rectHeight: 4,
+      color: <int>[255, 255, 255, 255],
+    );
+    final secondBytes = _frameBytesWithPixel(
+      Uint8List.fromList(firstBytes),
+      width: 4,
+      x: 3,
+      y: 2,
+      color: <int>[0, 143, 138, 255],
+    );
+    final sink = _MemoryWebpAnimationSink();
+    final encoder = WebpAnimationStreamEncoder(
+      sink: sink,
+      width: 4,
+      height: 4,
+      options: const WebpAnimationOptions(
+        trimChangedFrames: true,
+        previousFrameRetentionPolicy:
+            WebpPreviousFrameRetentionPolicy.reference,
+      ),
+    );
+
+    encoder.addFrame(
+      WebpFrame(
+        width: 4,
+        height: 4,
+        duration: const Duration(milliseconds: 80),
+        rgbaBytes: firstBytes,
+      ),
+    );
+    firstBytes.setRange(0, firstBytes.lengthInBytes, secondBytes);
+    encoder.addFrame(
+      WebpFrame(
+        width: 4,
+        height: 4,
+        duration: const Duration(milliseconds: 120),
+        rgbaBytes: secondBytes,
+      ),
+    );
+    encoder.close();
+
+    final controls = _webpFrameControls(sink.takeBytes());
+    expect(controls.last.width, 1);
+    expect(controls.last.height, 1);
+  });
+
   test('stream WebP duration errors do not advance encoder state', () {
     final sink = _MemoryWebpAnimationSink();
     final encoder = WebpAnimationStreamEncoder(sink: sink, width: 1, height: 1);

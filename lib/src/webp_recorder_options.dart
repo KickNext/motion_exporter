@@ -88,7 +88,25 @@ class WebpRecorderOptions {
   }
 }
 
-/// Options for direct [WebpAnimationEncoder] usage.
+/// How a streaming WebP encoder retains the previous frame for changed-frame
+/// trimming.
+enum WebpPreviousFrameRetentionPolicy {
+  /// Copy the previous frame bytes before returning from `addFrame`.
+  ///
+  /// This is the safe default for streaming encoders because callers may reuse
+  /// or mutate their RGBA buffers after handing a frame to the encoder.
+  copy,
+
+  /// Keep a reference to the caller-owned previous frame bytes.
+  ///
+  /// Use this for high-throughput streaming exports only when the frame buffer
+  /// will not be mutated or reused until after the next frame is added. It
+  /// avoids one full-frame allocation and copy per streamed frame when
+  /// changed-frame trimming is enabled.
+  reference,
+}
+
+/// Options for animated WebP encoding.
 class WebpAnimationOptions {
   /// Creates animation encoder options.
   const WebpAnimationOptions({
@@ -98,6 +116,7 @@ class WebpAnimationOptions {
     this.frameDispose = WebpFrameDispose.none,
     this.trimTransparentFrames = true,
     this.trimChangedFrames = false,
+    this.previousFrameRetentionPolicy = WebpPreviousFrameRetentionPolicy.copy,
   }) : assert(loopCount >= 0),
        assert(loopCount <= 0xffff);
 
@@ -126,6 +145,15 @@ class WebpAnimationOptions {
   /// the RGBA difference from the previous full snapshot. This is intended for
   /// full-snapshot captures and preserves replace-style alpha semantics.
   final bool trimChangedFrames;
+
+  /// How streaming WebP encoders retain the previous full frame used for
+  /// changed-frame bounds.
+  ///
+  /// This affects [WebpAnimationStreamEncoder] and
+  /// [WebpAnimationFileWriter] only when [trimChangedFrames] is true. The
+  /// non-streaming [WebpAnimationEncoder] already receives the whole frame
+  /// list and does not need to retain an extra previous-frame snapshot.
+  final WebpPreviousFrameRetentionPolicy previousFrameRetentionPolicy;
 
   _EncodeJob _toJob(List<MotionFrame> frames) {
     return _EncodeJob(

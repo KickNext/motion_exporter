@@ -145,7 +145,9 @@ const _motionGoldenHeaderBytes = 20;
 const _motionGoldenFrameHeaderBytes = 8;
 
 Uint8List _motionGoldenRleEncode(Uint8List bytes) {
-  final out = BytesBuilder(copy: false);
+  final maxEncodedBytes = bytes.lengthInBytes + _literalControlBytes(bytes);
+  final out = Uint8List(maxEncodedBytes);
+  var outOffset = 0;
   var literalStart = 0;
   var offset = 0;
 
@@ -153,8 +155,9 @@ Uint8List _motionGoldenRleEncode(Uint8List bytes) {
     var start = literalStart;
     while (start < end) {
       final length = math.min(128, end - start);
-      out.addByte(length - 1);
-      out.add(Uint8List.sublistView(bytes, start, start + length));
+      out[outOffset++] = length - 1;
+      out.setRange(outOffset, outOffset + length, bytes, start);
+      outOffset += length;
       start += length;
     }
   }
@@ -171,8 +174,8 @@ Uint8List _motionGoldenRleEncode(Uint8List bytes) {
     final runLength = runEnd - offset;
     if (runLength >= 3) {
       flushLiteral(offset);
-      out.addByte(0x80 | (runLength - 3));
-      out.addByte(value);
+      out[outOffset++] = 0x80 | (runLength - 3);
+      out[outOffset++] = value;
       offset = runEnd;
       literalStart = offset;
     } else {
@@ -180,7 +183,14 @@ Uint8List _motionGoldenRleEncode(Uint8List bytes) {
     }
   }
   flushLiteral(bytes.lengthInBytes);
-  return out.toBytes();
+  return Uint8List.sublistView(out, 0, outOffset);
+}
+
+int _literalControlBytes(Uint8List bytes) {
+  if (bytes.isEmpty) {
+    return 0;
+  }
+  return (bytes.lengthInBytes + 127) ~/ 128;
 }
 
 Uint8List _motionGoldenRleDecode(

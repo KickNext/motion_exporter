@@ -101,7 +101,11 @@ class WebpAnimationStreamEncoder {
 
     _frameCount++;
     if (options.trimChangedFrames) {
-      _previousChangedTrimFrameBytes = Uint8List.fromList(frame.rgbaBytes);
+      _previousChangedTrimFrameBytes =
+          options.previousFrameRetentionPolicy ==
+              WebpPreviousFrameRetentionPolicy.reference
+          ? frame.rgbaBytes
+          : Uint8List.fromList(frame.rgbaBytes);
     }
   }
 

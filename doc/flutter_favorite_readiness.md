@@ -17,6 +17,8 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   the animated WebP export artifact for human review.
 - `pubspec.yaml` points `homepage`, `repository`, and `issue_tracker` to the
   public GitHub repository: https://github.com/KickNext/motion_exporter
+- GitHub Pages serves the browser demo from the example app:
+  https://kicknext.github.io/motion_exporter/
 - `pubspec.yaml` explicitly declares Android, iOS, Linux, macOS, web, and
   Windows support for pub.dev platform metadata.
 - Root package gate is green locally:

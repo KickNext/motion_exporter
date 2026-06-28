@@ -228,6 +228,22 @@ void main() {
     expect(controls.last.flags, 0x02);
   });
 
+  test('motion clip encoder exposes explicit format constructors', () async {
+    final clip = _singlePixelClip();
+
+    final webp = await const MotionClipEncoder.webp(
+      useBackgroundIsolate: false,
+    ).encode(clip);
+    final apng = await const MotionClipEncoder.apng(
+      useBackgroundIsolate: false,
+    ).encode(clip);
+
+    expect(webp.format, MotionExportFormat.webp);
+    expect(_topLevelChunks(webp.bytes), contains('ANIM'));
+    expect(apng.format, MotionExportFormat.apng);
+    expect(_pngChunks(apng.bytes), contains('acTL'));
+  });
+
   test('motion export engine records deterministic WebP by default', () async {
     const engine = MotionExportEngine(
       encoder: MotionClipEncoder(useBackgroundIsolate: false),

@@ -166,6 +166,40 @@ class MotionClipEncoder {
     this.validationPolicy = const MotionExportValidationPolicy(),
   });
 
+  /// Creates a WebP clip encoder.
+  const MotionClipEncoder.webp({
+    WebpAnimationOptions options = const WebpAnimationOptions(
+      trimChangedFrames: true,
+    ),
+    bool useBackgroundIsolate = true,
+    MotionCaptureQualityPolicy qualityPolicy =
+        const MotionCaptureQualityPolicy(),
+    MotionExportValidationPolicy validationPolicy =
+        const MotionExportValidationPolicy(),
+  }) : this(
+         format: MotionExportFormat.webp,
+         webpOptions: options,
+         useBackgroundIsolate: useBackgroundIsolate,
+         qualityPolicy: qualityPolicy,
+         validationPolicy: validationPolicy,
+       );
+
+  /// Creates an APNG clip encoder.
+  const MotionClipEncoder.apng({
+    ApngAnimationOptions options = const ApngAnimationOptions(),
+    bool useBackgroundIsolate = true,
+    MotionCaptureQualityPolicy qualityPolicy =
+        const MotionCaptureQualityPolicy(),
+    MotionExportValidationPolicy validationPolicy =
+        const MotionExportValidationPolicy(),
+  }) : this(
+         format: MotionExportFormat.apng,
+         apngOptions: options,
+         useBackgroundIsolate: useBackgroundIsolate,
+         qualityPolicy: qualityPolicy,
+         validationPolicy: validationPolicy,
+       );
+
   /// Encoded output format.
   final MotionExportFormat format;
 

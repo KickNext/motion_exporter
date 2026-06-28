@@ -149,6 +149,8 @@ in the captured animation. It exports WebP by default. Use
 
 `MotionExportEngine` and `MotionClipEncoder` export WebP by default, using
 changed-frame WebP trimming to avoid full-canvas work on snapshot exports.
+Use `const MotionClipEncoder.webp()` or `const MotionClipEncoder.apng()` when
+the selected preview format should be obvious at the call site.
 
 For a custom UI, wrap only the animated subtree:
 

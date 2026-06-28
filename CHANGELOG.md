@@ -1,6 +1,8 @@
 ## 0.0.1
 
 * Initial release as `motion_exporter`.
+* Package metadata describes the WebP/APNG export and raw `.motion` golden test
+  workflows for pub.dev discovery.
 * Supports Flutter `>=3.41.0` / Dart `>=3.11.0`, with lower-bound analysis and
   package tests verified on Flutter 3.41.0.
 * Added widget motion capture APIs: `MotionRecorder`,

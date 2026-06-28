@@ -49,7 +49,7 @@ jobs:
       - name: Test package at lower bound
         run: flutter test --no-pub test/motion_exporter_test.dart
 
-  verify:
+  release_verify:
     needs: check-tag
     runs-on: ubuntu-latest
     steps:
@@ -193,7 +193,7 @@ jobs:
     needs:
       - check-tag
       - lower_bound
-      - verify
+      - release_verify
       - linux_desktop
       - macos_desktop
       - windows_desktop

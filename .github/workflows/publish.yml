@@ -113,7 +113,7 @@ jobs:
 
   macos_desktop:
     needs: check-tag
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
 
@@ -171,7 +171,7 @@ jobs:
 
   ios:
     needs: check-tag
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
 

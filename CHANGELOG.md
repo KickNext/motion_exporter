@@ -63,6 +63,7 @@
   macOS, and Windows example build smoke checks, explicit pub.dev platform
   metadata, GitHub intake templates, Dependabot maintenance for pub packages
   and GitHub Actions, first-publish release guidance aligned with the full
-  CI/publish gate, and malformed `.motion` golden validation.
+  CI/publish gate, pinned macOS CI runners, and malformed `.motion` golden
+  validation.
 * Kept the example app web-buildable by moving native file writes behind a
   conditional import.

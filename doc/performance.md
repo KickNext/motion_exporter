@@ -6,23 +6,24 @@ comparison is the fast path, while lossless WebP export is CPU-heavy.
 
 ## Current benchmark
 
-Measured with:
+Measured on 2026-06-28 with:
 
-- Windows 11, Dart 3.12.1, 32 logical processors.
+- Windows 11 build 26200, Flutter 3.44.1 / Dart 3.12.1, 32 logical
+  processors.
 - Deterministic demo scene: 256 x 256 pixels, 240 frames, 2 seconds.
 - Retained raw RGBA input: 60.0 MiB.
 
 | Case | Format | Size | Encode |
 | --- | --- | ---: | ---: |
-| Raw `.motion` golden | `.motion` | 17287.0 KiB | 144.2 ms |
-| Raw `.motion` compare | `.motion` | same | 19.6 ms |
-| WebP default changed rect | WebP | 5087.7 KiB | 2645.5 ms |
-| WebP transparent trim | WebP | 5087.2 KiB | 2861.9 ms |
-| WebP full canvas | WebP | 5196.6 KiB | 6277.3 ms |
-| APNG transparent trim | APNG | 5302.4 KiB | 267.2 ms |
-| APNG full canvas | APNG | 5746.3 KiB | 313.9 ms |
+| Raw `.motion` golden | `.motion` | 17287.0 KiB | 159.6 ms |
+| Raw `.motion` compare | `.motion` | same | 22.7 ms |
+| WebP default changed rect | WebP | 5087.7 KiB | 2987.9 ms |
+| WebP transparent trim | WebP | 5087.2 KiB | 2997.9 ms |
+| WebP full canvas | WebP | 5196.6 KiB | 6967.9 ms |
+| APNG transparent trim | APNG | 5302.4 KiB | 326.9 ms |
+| APNG full canvas | APNG | 5746.3 KiB | 372.6 ms |
 
-The default WebP encoder is about 2.4x faster than full-canvas WebP for this
+The default WebP encoder is about 2.3x faster than full-canvas WebP for this
 scene because it writes only changed rectangles after the first frame. APNG is
 much faster in the current pure-Dart implementation, but WebP remains the
 default preview format because the package is WebP-first and keeps WebP file

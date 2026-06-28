@@ -60,16 +60,21 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   example web/WebAssembly, raw golden workflow, benchmark validation, package
   archive dry-run, Linux, macOS, Windows, Android, and iOS smoke builds:
   https://github.com/KickNext/motion_exporter/actions/workflows/ci.yml
-- `dart pub publish --dry-run` packages successfully with no warnings locally.
+- `dart pub publish --dry-run` packages successfully with no warnings locally
+  on 2026-06-28.
 - `git status --short --branch` is clean on `main`, with the local branch
   tracking `origin/main`.
-- `pana . --no-warning` on Flutter 3.44.1 / Dart 3.12.1 currently scores
-  140/160 locally on Windows: static analysis, dependencies, platform support,
-  README, CHANGELOG, license, and example are green.
+- `pana . --no-warning` on Flutter 3.44.1 / Dart 3.12.1 with `pana 0.23.12`
+  currently scores 140/160 locally on Windows: static analysis, dependencies,
+  platform support, README, CHANGELOG, license, and example are green.
 - `dart doc --dry-run` fails locally with the same `RangeError` in
   `DocumentationComment._stripDocImports` that `pana` reports, so the lost
   dartdoc score is reproducible outside `pana`. Upstream tracking issue:
   https://github.com/dart-lang/dartdoc/issues/4180
+- `example/tool/benchmark_exports.dart` and
+  `example/tool/validate_benchmark_json.dart` pass locally on 2026-06-28, and
+  `doc/performance.md` records the refreshed WebP/APNG/raw `.motion` timing
+  snapshot.
 
 ## Known blockers
 

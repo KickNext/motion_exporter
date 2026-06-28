@@ -30,6 +30,7 @@ void main() {
         // Paint the exact frame for progress/elapsed.
       },
       update: Platform.environment['UPDATE_GOLDENS'] == '1',
+      failureArtifactsDirectory: Directory('build/motion_failures'),
       channelTolerance: 1,
     );
   });
@@ -54,6 +55,7 @@ await expectMotionClipGolden(
   actual: clip,
   file: File('test/goldens/spinner.motion'),
   update: Platform.environment['UPDATE_GOLDENS'] == '1',
+  failureArtifactsDirectory: Directory('build/motion_failures'),
 );
 ```
 
@@ -76,6 +78,10 @@ Verify in CI without updating:
 ```sh
 flutter test test/spinner_golden_test.dart
 ```
+
+When `failureArtifactsDirectory` is set, a mismatch writes `actual`,
+`expected`, and `diff` PNG files for the first comparable failing frame. Upload
+that directory from CI when the test fails.
 
 ## Why raw goldens
 

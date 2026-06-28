@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart' show Size;
+import 'package:image/image.dart' as img;
 
 import 'motion_exporter.dart';
 
@@ -215,11 +216,14 @@ Future<MotionClipComparison> compareMotionClipGolden({
 ///
 /// Set [update] from an explicit test flag, for example
 /// `Platform.environment['UPDATE_GOLDENS'] == '1'`.
+/// When [failureArtifactsDirectory] is set, mismatches write actual, expected,
+/// and diff PNG files for the first comparable failing frame.
 Future<void> expectMotionClipGolden({
   required MotionClip actual,
   required File file,
   bool update = false,
   MotionClipGoldenCodec codec = const MotionClipGoldenCodec(),
+  Directory? failureArtifactsDirectory,
   int channelTolerance = 0,
   double maxMismatchedPixelRatio = 0,
   Duration durationTolerance = Duration.zero,
@@ -235,15 +239,34 @@ Future<void> expectMotionClipGolden({
       'Run the test with update enabled to create it.',
     );
   }
-  final comparison = await compareMotionClipGolden(
+  final expected = await readMotionClipGolden(file, codec: codec);
+  final comparison = MotionClipComparison.compare(
     actual: actual,
-    file: file,
-    codec: codec,
+    expected: expected,
     channelTolerance: channelTolerance,
     maxMismatchedPixelRatio: maxMismatchedPixelRatio,
     durationTolerance: durationTolerance,
   );
-  comparison.throwIfMismatch(description: description ?? file.path);
+  if (comparison.isMatch) {
+    return;
+  }
+
+  final artifactSummary = failureArtifactsDirectory == null
+      ? null
+      : await _writeMotionClipGoldenFailureArtifacts(
+          actual: actual,
+          expected: expected,
+          goldenFile: file,
+          directory: failureArtifactsDirectory,
+          comparison: comparison,
+          channelTolerance: channelTolerance,
+        );
+  comparison.throwIfMismatch(
+    description: _motionGoldenFailureDescription(
+      description ?? file.path,
+      artifactSummary,
+    ),
+  );
 }
 
 /// Renders deterministic canvas motion and verifies it against a `.motion`
@@ -261,6 +284,7 @@ Future<MotionClip> expectMotionCanvasGolden({
   MotionClipTransform? clipTransform,
   bool update = false,
   MotionClipGoldenCodec codec = const MotionClipGoldenCodec(),
+  Directory? failureArtifactsDirectory,
   int channelTolerance = 0,
   double maxMismatchedPixelRatio = 0,
   Duration durationTolerance = Duration.zero,
@@ -279,12 +303,136 @@ Future<MotionClip> expectMotionCanvasGolden({
     file: file,
     update: update,
     codec: codec,
+    failureArtifactsDirectory: failureArtifactsDirectory,
     channelTolerance: channelTolerance,
     maxMismatchedPixelRatio: maxMismatchedPixelRatio,
     durationTolerance: durationTolerance,
     description: description,
   );
   return clip;
+}
+
+Future<String?> _writeMotionClipGoldenFailureArtifacts({
+  required MotionClip actual,
+  required MotionClip expected,
+  required File goldenFile,
+  required Directory directory,
+  required MotionClipComparison comparison,
+  required int channelTolerance,
+}) async {
+  final frameIndex = _firstArtifactFrameIndex(comparison);
+  if (frameIndex == null ||
+      frameIndex >= actual.frameCount ||
+      frameIndex >= expected.frameCount) {
+    return null;
+  }
+
+  await directory.create(recursive: true);
+  final prefix =
+      '${_motionGoldenArtifactBaseName(goldenFile)}_'
+      'frame_${frameIndex.toString().padLeft(4, '0')}';
+  final actualFile = _artifactFile(directory, '$prefix.actual.png');
+  final expectedFile = _artifactFile(directory, '$prefix.expected.png');
+  final diffFile = _artifactFile(directory, '$prefix.diff.png');
+
+  final actualFrame = actual.frames[frameIndex];
+  final expectedFrame = expected.frames[frameIndex];
+  await actualFile.writeAsBytes(_motionFramePng(actualFrame), flush: true);
+  await expectedFile.writeAsBytes(_motionFramePng(expectedFrame), flush: true);
+
+  if (actualFrame.width == expectedFrame.width &&
+      actualFrame.height == expectedFrame.height) {
+    await diffFile.writeAsBytes(
+      _motionFrameDiffPng(
+        actual: actualFrame,
+        expected: expectedFrame,
+        channelTolerance: channelTolerance,
+      ),
+      flush: true,
+    );
+    return 'artifacts: ${actualFile.path}, ${expectedFile.path}, '
+        '${diffFile.path}';
+  }
+
+  return 'artifacts: ${actualFile.path}, ${expectedFile.path}';
+}
+
+int? _firstArtifactFrameIndex(MotionClipComparison comparison) {
+  for (final frame in comparison.frames) {
+    if (frame.durationDelta > comparison.durationTolerance ||
+        frame.mismatchedPixelRatio > comparison.maxMismatchedPixelRatio) {
+      return frame.index;
+    }
+  }
+  if (comparison.frames.isNotEmpty &&
+      (!comparison.dimensionsMatch ||
+          !comparison.frameCountMatch ||
+          !comparison.durationMatches)) {
+    return 0;
+  }
+  return null;
+}
+
+String _motionGoldenArtifactBaseName(File file) {
+  final name = file.uri.pathSegments.isEmpty
+      ? 'motion'
+      : file.uri.pathSegments.last;
+  return name.endsWith('.motion')
+      ? name.substring(0, name.length - '.motion'.length)
+      : name;
+}
+
+File _artifactFile(Directory directory, String name) {
+  return File('${directory.path}${Platform.pathSeparator}$name');
+}
+
+Uint8List _motionFramePng(MotionFrame frame) {
+  return img.encodePng(
+    img.Image.fromBytes(
+      width: frame.width,
+      height: frame.height,
+      bytes: frame.rgbaBytes.buffer,
+      bytesOffset: frame.rgbaBytes.offsetInBytes,
+      numChannels: 4,
+      order: img.ChannelOrder.rgba,
+    ),
+  );
+}
+
+Uint8List _motionFrameDiffPng({
+  required MotionFrame actual,
+  required MotionFrame expected,
+  required int channelTolerance,
+}) {
+  final diff = Uint8List(actual.rgbaBytes.lengthInBytes);
+  final actualBytes = actual.rgbaBytes;
+  final expectedBytes = expected.rgbaBytes;
+  for (var i = 0; i < diff.lengthInBytes; i += 4) {
+    var mismatch = false;
+    for (var channel = 0; channel < 4; channel++) {
+      if ((actualBytes[i + channel] - expectedBytes[i + channel]).abs() >
+          channelTolerance) {
+        mismatch = true;
+      }
+    }
+    if (mismatch) {
+      diff[i] = 255;
+      diff[i + 3] = 255;
+    }
+  }
+  return img.encodePng(
+    img.Image.fromBytes(
+      width: actual.width,
+      height: actual.height,
+      bytes: diff.buffer,
+      numChannels: 4,
+      order: img.ChannelOrder.rgba,
+    ),
+  );
+}
+
+String _motionGoldenFailureDescription(String description, String? artifacts) {
+  return artifacts == null ? description : '$description ($artifacts)';
 }
 
 class _RandomAccessFileWebpSink implements WebpAnimationStreamSink {

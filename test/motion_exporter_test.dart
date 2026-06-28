@@ -643,10 +643,45 @@ void main() {
       file: file,
       channelTolerance: 1,
     );
-    await expectLater(
-      expectMotionClipGolden(actual: actual, file: file),
-      throwsA(isA<MotionClipComparisonException>()),
+    final artifacts = Directory(
+      '${directory.path}${Platform.pathSeparator}failures',
     );
+    await expectLater(
+      expectMotionClipGolden(
+        actual: actual,
+        file: file,
+        failureArtifactsDirectory: artifacts,
+      ),
+      throwsA(
+        isA<MotionClipComparisonException>().having(
+          (error) => error.toString(),
+          'message',
+          allOf(
+            contains('artifacts:'),
+            contains('spinner_frame_0000.actual.png'),
+            contains('spinner_frame_0000.expected.png'),
+            contains('spinner_frame_0000.diff.png'),
+          ),
+        ),
+      ),
+    );
+    final artifactNames = artifacts
+        .listSync()
+        .whereType<File>()
+        .map((file) => file.uri.pathSegments.last)
+        .toSet();
+    expect(
+      artifactNames,
+      containsAll(<String>{
+        'spinner_frame_0000.actual.png',
+        'spinner_frame_0000.expected.png',
+        'spinner_frame_0000.diff.png',
+      }),
+    );
+    for (final file in artifacts.listSync().whereType<File>()) {
+      final bytes = await file.readAsBytes();
+      expect(bytes.take(_pngSignature.length), _pngSignature);
+    }
   });
 
   test('motion canvas golden helper renders, updates, and verifies', () async {

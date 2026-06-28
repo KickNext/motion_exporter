@@ -97,6 +97,7 @@ void main() {
         // Paint the exact frame for progress/elapsed.
       },
       update: Platform.environment['UPDATE_GOLDENS'] == '1',
+      failureArtifactsDirectory: Directory('build/motion_failures'),
       channelTolerance: 1,
     );
   });
@@ -111,8 +112,10 @@ flutter test test/spinner_golden_test.dart
 Remove-Item Env:\UPDATE_GOLDENS
 ```
 
-CI should run the same test without `UPDATE_GOLDENS`. Encode WebP/APNG only for
-review artifacts after the raw clip has already passed the assertion.
+CI should run the same test without `UPDATE_GOLDENS`. On mismatch, the helper
+writes `actual`, `expected`, and `diff` PNGs for the first failing frame into
+`build/motion_failures`. Encode WebP/APNG only for review artifacts after the
+raw clip has already passed the assertion.
 
 For quick debug exports, wrap your app with the developer overlay:
 
@@ -337,6 +340,7 @@ await expectMotionClipGolden(
   actual: clip,
   file: File('test/goldens/loading_spinner.motion'),
   update: Platform.environment['UPDATE_GOLDENS'] == '1',
+  failureArtifactsDirectory: Directory('build/motion_failures'),
   channelTolerance: 1,
 );
 ```

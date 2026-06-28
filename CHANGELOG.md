@@ -44,7 +44,8 @@
   goldens use lossless RLE compression when it reduces file size while
   remaining backward-compatible with raw `.motion` files, with a preallocated
   RLE writer for lower CI encode overhead. The README now leads with a
-  golden-first quick start, including PowerShell update commands.
+  golden-first quick start, including PowerShell update commands and optional
+  PNG mismatch artifacts for CI failures.
 * Added an interactive example app, deterministic 120 fps demo generation,
   encoded WebP preview playback, and an optional benchmark tool with CI smoke
   coverage plus JSON validation for WebP/APNG export timing, size snapshots,

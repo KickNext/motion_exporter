@@ -375,12 +375,24 @@ class _WebpRecorderState extends State<WebpRecorder>
     required Duration capturedAt,
     required WebpRecorderOptions options,
   }) {
+    final hash = options.collapseIdenticalFrames ? _fnv1a32(rgbaBytes) : null;
+    final previous = _frames.isEmpty ? null : _frames.last;
+    if (options.collapseIdenticalFrames &&
+        previous != null &&
+        previous.width == width &&
+        previous.height == height &&
+        previous.hash == hash &&
+        _bytesEqual(previous.rgbaBytes, rgbaBytes)) {
+      return false;
+    }
+
     _frames.add(
       _CapturedFrame(
         rgbaBytes: rgbaBytes,
         width: width,
         height: height,
         capturedAt: capturedAt,
+        hash: hash,
         duration: Duration.zero,
       ),
     );
@@ -542,7 +554,7 @@ class _CaptureDiagnosticsBuilder {
       capturedFrames: _capturedFrames,
       keptFrames: keptFrames,
       skippedFrames: _skippedFrames,
-      collapsedFrames: _collapsedFrames,
+      collapsedFrames: math.max(_collapsedFrames, _capturedFrames - keptFrames),
       width: _width,
       height: _height,
       sampledBytes: _sampledBytes,

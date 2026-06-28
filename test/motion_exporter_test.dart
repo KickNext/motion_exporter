@@ -1099,6 +1099,54 @@ void main() {
     expect(recording.bytes, isNotEmpty);
   });
 
+  testWidgets('collapses identical captures before retaining frame bytes', (
+    tester,
+  ) async {
+    final controller = MotionRecorderController();
+
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: Center(
+          child: SizedBox(
+            width: 2,
+            height: 2,
+            child: MotionRecorder(
+              controller: controller,
+              child: const ColoredBox(color: Color(0x80008f8a)),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await controller.start(
+      options: const MotionRecorderOptions(
+        framesPerSecond: 1,
+        pixelRatio: 1,
+        useBackgroundIsolate: false,
+      ),
+    );
+
+    var capture = controller.captureFrame();
+    await tester.pump();
+    await tester.runAsync(() => capture);
+    capture = controller.captureFrame();
+    await tester.pump();
+    await tester.runAsync(() => capture);
+
+    expect(controller.frameCount, 1);
+    expect(controller.diagnostics!.capturedFrames, 2);
+    expect(controller.diagnostics!.keptFrames, 1);
+    expect(controller.diagnostics!.collapsedFrames, 1);
+    expect(controller.diagnostics!.sampledBytes, 32);
+    expect(controller.diagnostics!.retainedBytes, 16);
+
+    final clip = await tester.runAsync(controller.stopCapture);
+    expect(clip!.frameCount, 1);
+    expect(clip.rawBytes, 16);
+  });
+
   testWidgets('stops and exports through the controller shortcut', (
     tester,
   ) async {

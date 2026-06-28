@@ -420,6 +420,9 @@ flutter test tool/benchmark_exports.dart --reporter expanded
 dart run tool/validate_benchmark_json.dart output/benchmark.json
 ```
 
+See [doc/performance.md](doc/performance.md) for a measured snapshot and
+guidance on choosing raw goldens, WebP, or APNG.
+
 For high-resolution output, pass a larger `pixelRatio`. For long animations,
 keep `framesPerSecond` and `pixelRatio` conservative because Flutter must read
 RGBA pixels back from the GPU for every captured frame.

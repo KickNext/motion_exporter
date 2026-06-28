@@ -1,23 +1,21 @@
 part of '../motion_exporter.dart';
 
-/// Format-neutral name for [WebpRecorder].
-///
-/// Prefer this name for new code. The recorder captures raw RGBA frames from a
-/// widget subtree; choose APNG or WebP later with [MotionClipEncoder].
-typedef MotionRecorder = WebpRecorder;
+/// Deprecated WebP-specific name for [MotionRecorder].
+@Deprecated('Use MotionRecorder; WebP is only one export format.')
+typedef WebpRecorder = MotionRecorder;
 
-/// Format-neutral name for [WebpRecorderController].
-///
-/// Prefer this name for new code. Use [MotionRecorderController.stopExport] for
-/// one-step APNG/WebP export or [MotionRecorderController.stopCapture] for raw
-/// frames.
-typedef MotionRecorderController = WebpRecorderController;
+/// Deprecated WebP-specific name for [MotionRecorderController].
+@Deprecated('Use MotionRecorderController; choose WebP with MotionClipEncoder.')
+typedef WebpRecorderController = MotionRecorderController;
 
-/// Format-neutral name for [WebpRecorderOptions].
-typedef MotionRecorderOptions = WebpRecorderOptions;
+/// Deprecated WebP-specific name for [MotionRecorderOptions].
+@Deprecated('Use MotionRecorderOptions; choose WebP with MotionClipEncoder.')
+typedef WebpRecorderOptions = MotionRecorderOptions;
 
-/// Format-neutral name for [WebpCaptureDiagnostics].
-typedef MotionCaptureDiagnostics = WebpCaptureDiagnostics;
+/// Deprecated WebP-specific name for [MotionCaptureDiagnostics].
+@Deprecated('Use MotionCaptureDiagnostics.')
+typedef WebpCaptureDiagnostics = MotionCaptureDiagnostics;
 
-/// Format-neutral name for [WebpRecording].
-typedef MotionRecording = WebpRecording;
+/// Deprecated WebP-specific name for [MotionRecording].
+@Deprecated('Use MotionRecording.')
+typedef WebpRecording = MotionRecording;

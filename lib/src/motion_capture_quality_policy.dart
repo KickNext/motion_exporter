@@ -71,7 +71,7 @@ class MotionCaptureQualityPolicy {
   /// Maximum retained raw RGBA bytes allowed before export encoding.
   ///
   /// Use [MotionCaptureEstimate.rawBytes] before recording to choose this
-  /// budget, then enforce it against actual [WebpCaptureDiagnostics.retainedBytes]
+  /// budget, then enforce it against actual [MotionCaptureDiagnostics.retainedBytes]
   /// before APNG/WebP encoding starts.
   final int? maxRetainedBytes;
 

@@ -1,16 +1,16 @@
 part of '../motion_exporter.dart';
 
 /// Wraps a widget subtree and captures raw frames for motion export.
-class WebpRecorder extends StatefulWidget {
+class MotionRecorder extends StatefulWidget {
   /// Creates a recorder around [child].
-  const WebpRecorder({
+  const MotionRecorder({
     required this.controller,
     required this.child,
     super.key,
   });
 
   /// Controller used to start and stop recording.
-  final WebpRecorderController controller;
+  final MotionRecorderController controller;
 
   /// Widget subtree to capture.
   ///
@@ -19,16 +19,16 @@ class WebpRecorder extends StatefulWidget {
   final Widget child;
 
   @override
-  State<WebpRecorder> createState() => _WebpRecorderState();
+  State<MotionRecorder> createState() => _MotionRecorderState();
 }
 
-class _WebpRecorderState extends State<WebpRecorder>
+class _MotionRecorderState extends State<MotionRecorder>
     with SingleTickerProviderStateMixin {
   final GlobalKey _boundaryKey = GlobalKey();
   final List<_CapturedFrame> _frames = <_CapturedFrame>[];
 
   Ticker? _ticker;
-  WebpRecorderOptions? _options;
+  MotionRecorderOptions? _options;
   _CaptureDiagnosticsBuilder? _diagnosticsBuilder;
   Duration _nextCaptureAt = Duration.zero;
   final Set<Future<void>> _captureFutures = <Future<void>>{};
@@ -46,7 +46,7 @@ class _WebpRecorderState extends State<WebpRecorder>
   }
 
   @override
-  void didUpdateWidget(WebpRecorder oldWidget) {
+  void didUpdateWidget(MotionRecorder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller._detach(this);
@@ -61,7 +61,7 @@ class _WebpRecorderState extends State<WebpRecorder>
     super.dispose();
   }
 
-  Future<void> _start(WebpRecorderOptions options) async {
+  Future<void> _start(MotionRecorderOptions options) async {
     if (_sessionActive) {
       throw StateError('Motion recording is already active.');
     }
@@ -113,7 +113,7 @@ class _WebpRecorderState extends State<WebpRecorder>
           ? await compute(_encodeWebpAnimation, job, debugLabel: 'webp_encode')
           : _encodeWebpAnimation(job);
 
-      return WebpRecording(
+      return MotionRecording(
         bytes: bytes,
         frameCount: clip.frameCount,
         width: clip.width,
@@ -308,11 +308,11 @@ class _WebpRecorderState extends State<WebpRecorder>
     final renderObject = _boundaryKey.currentContext?.findRenderObject();
     if (renderObject is! RenderRepaintBoundary) {
       throw StateError(
-        'WebpRecorder child is not attached to a repaint boundary.',
+        'MotionRecorder child is not attached to a repaint boundary.',
       );
     }
     if (!renderObject.hasSize || renderObject.size.isEmpty) {
-      throw StateError('WebpRecorder child has no paint size.');
+      throw StateError('MotionRecorder child has no paint size.');
     }
 
     final toImageWatch = Stopwatch()..start();
@@ -373,7 +373,7 @@ class _WebpRecorderState extends State<WebpRecorder>
     required int width,
     required int height,
     required Duration capturedAt,
-    required WebpRecorderOptions options,
+    required MotionRecorderOptions options,
   }) {
     final hash = options.collapseIdenticalFrames ? _fnv1a32(rgbaBytes) : null;
     final previous = _frames.isEmpty ? null : _frames.last;
@@ -465,7 +465,7 @@ class _WebpRecorderState extends State<WebpRecorder>
 class _CaptureDiagnosticsBuilder {
   _CaptureDiagnosticsBuilder(this.options);
 
-  final WebpRecorderOptions options;
+  final MotionRecorderOptions options;
   final Stopwatch _sessionWatch = Stopwatch();
 
   Duration get elapsed => _sessionWatch.elapsed;
@@ -545,8 +545,8 @@ class _CaptureDiagnosticsBuilder {
     _retainedBytes = retainedBytes;
   }
 
-  WebpCaptureDiagnostics snapshot({required int keptFrames}) {
-    return WebpCaptureDiagnostics(
+  MotionCaptureDiagnostics snapshot({required int keptFrames}) {
+    return MotionCaptureDiagnostics(
       targetFramesPerSecond: options.framesPerSecond,
       pixelRatio: options.pixelRatio,
       captureElapsed: _sessionWatch.elapsed,

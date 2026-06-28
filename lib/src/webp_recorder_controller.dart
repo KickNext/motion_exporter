@@ -18,9 +18,9 @@ enum MotionCaptureQualityStatus {
 }
 
 /// Immutable performance snapshot for the current or last capture session.
-class WebpCaptureDiagnostics {
+class MotionCaptureDiagnostics {
   /// Creates a capture diagnostics snapshot.
-  const WebpCaptureDiagnostics({
+  const MotionCaptureDiagnostics({
     required this.targetFramesPerSecond,
     required this.pixelRatio,
     required this.captureElapsed,
@@ -211,7 +211,7 @@ class WebpCaptureDiagnostics {
   /// Capture timings and skipped-frame counters remain unchanged. Final counters
   /// such as [keptFrames], [collapsedFrames], and [retainedBytes] are updated so
   /// an export-time [MotionClipTransform] is reflected in the result.
-  WebpCaptureDiagnostics forClip(MotionClip clip) {
+  MotionCaptureDiagnostics forClip(MotionClip clip) {
     return copyWith(
       keptFrames: clip.frameCount,
       collapsedFrames: math.max(0, capturedFrames - clip.frameCount),
@@ -220,7 +220,7 @@ class WebpCaptureDiagnostics {
   }
 
   /// Returns a diagnostics snapshot with selected fields replaced.
-  WebpCaptureDiagnostics copyWith({
+  MotionCaptureDiagnostics copyWith({
     int? targetFramesPerSecond,
     double? pixelRatio,
     Duration? captureElapsed,
@@ -244,7 +244,7 @@ class WebpCaptureDiagnostics {
     Duration? maxToByteDataTime,
     Duration? maxStoreTime,
   }) {
-    return WebpCaptureDiagnostics(
+    return MotionCaptureDiagnostics(
       targetFramesPerSecond:
           targetFramesPerSecond ?? this.targetFramesPerSecond,
       pixelRatio: pixelRatio ?? this.pixelRatio,
@@ -280,14 +280,14 @@ String _formatDiagnosticsPercent(double ratio) {
   return '${(ratio * 100).toStringAsFixed(0)}%';
 }
 
-/// Controls a [WebpRecorder] widget.
-class WebpRecorderController extends ChangeNotifier {
-  _WebpRecorderState? _state;
+/// Controls a [MotionRecorder] widget.
+class MotionRecorderController extends ChangeNotifier {
+  _MotionRecorderState? _state;
   bool _isRecording = false;
   bool _isEncoding = false;
   int _frameCount = 0;
   Object? _lastError;
-  WebpCaptureDiagnostics? _diagnostics;
+  MotionCaptureDiagnostics? _diagnostics;
 
   /// Whether frames are currently being captured.
   bool get isRecording => _isRecording;
@@ -305,7 +305,7 @@ class WebpRecorderController extends ChangeNotifier {
   Object? get lastError => _lastError;
 
   /// Performance diagnostics for the current or last capture session.
-  WebpCaptureDiagnostics? get diagnostics => _diagnostics;
+  MotionCaptureDiagnostics? get diagnostics => _diagnostics;
 
   /// Registers [listener] for capture and encoding status changes.
   @override
@@ -325,9 +325,9 @@ class WebpRecorderController extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Starts capturing frames from the attached [WebpRecorder].
+  /// Starts capturing frames from the attached [MotionRecorder].
   Future<void> start({
-    WebpRecorderOptions options = const WebpRecorderOptions(),
+    MotionRecorderOptions options = const MotionRecorderOptions(),
   }) {
     return _requireState()._start(options);
   }
@@ -478,24 +478,24 @@ class WebpRecorderController extends ChangeNotifier {
     return _requireState()._cancel();
   }
 
-  void _attach(_WebpRecorderState state) {
+  void _attach(_MotionRecorderState state) {
     if (_state != null && _state != state) {
-      throw StateError('This WebpRecorderController is already attached.');
+      throw StateError('This MotionRecorderController is already attached.');
     }
     _state = state;
   }
 
-  void _detach(_WebpRecorderState state) {
+  void _detach(_MotionRecorderState state) {
     if (_state == state) {
       _state = null;
     }
   }
 
-  _WebpRecorderState _requireState() {
+  _MotionRecorderState _requireState() {
     final state = _state;
     if (state == null) {
       throw StateError(
-        'WebpRecorderController is not attached to a WebpRecorder widget.',
+        'MotionRecorderController is not attached to a MotionRecorder widget.',
       );
     }
     return state;
@@ -506,7 +506,7 @@ class WebpRecorderController extends ChangeNotifier {
     bool? isEncoding,
     int? frameCount,
     Object? lastError,
-    WebpCaptureDiagnostics? diagnostics,
+    MotionCaptureDiagnostics? diagnostics,
     bool clearError = false,
     bool clearDiagnostics = false,
   }) {

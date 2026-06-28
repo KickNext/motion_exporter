@@ -17,8 +17,7 @@ UI isolate with Flutter's `compute` helper when available.
 
 - Record any animated Flutter widget subtree.
 - Use format-neutral `MotionRecorder` APIs while keeping WebP-specific encoders
-  available for explicit WebP workflows. `MotionRecording` is the neutral name
-  for the legacy `WebpRecording` result returned by `MotionRecorderController.stopWebp()`.
+  available for explicit WebP workflows.
 - Preserve alpha/transparency with RGBA capture and lossless VP8L WebP frames.
 - Export animated WebP by default with a valid `VP8X`/`ANIM`/`ANMF` container.
 - Export APNG explicitly when broad transparent-animation playback matters more
@@ -207,7 +206,7 @@ final result = await engine.stopRecording(
 
 Use `controller.stopCapture()` for raw `.motion` goldens, `controller.stopExport()`
 when you want to choose APNG/WebP through `MotionClipEncoder`, and
-`controller.stopWebp()` only for the legacy direct-WebP shortcut.
+`controller.stopWebp()` only for the direct-WebP shortcut.
 
 Set encoder policy once on the engine when the workflow needs stricter export
 rules:

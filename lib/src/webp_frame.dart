@@ -315,11 +315,9 @@ enum WebpFrameDispose {
 }
 
 /// Encoded WebP bytes plus useful recording metadata.
-///
-/// Prefer the format-neutral [MotionRecording] typedef in new code.
-class WebpRecording {
+class MotionRecording {
   /// Creates a completed recording.
-  const WebpRecording({
+  const MotionRecording({
     required this.bytes,
     required this.frameCount,
     required this.width,
@@ -348,7 +346,7 @@ class WebpRecording {
   final MotionClip? clip;
 
   /// Performance diagnostics captured during recording, when available.
-  final WebpCaptureDiagnostics? diagnostics;
+  final MotionCaptureDiagnostics? diagnostics;
 }
 
 class _CapturedFrame {

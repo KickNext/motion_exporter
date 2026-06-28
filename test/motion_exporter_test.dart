@@ -26,7 +26,7 @@ void main() {
 
     await tester.pumpWidget(
       MotionExporterOverlay(
-        options: const WebpRecorderOptions(
+        options: const MotionRecorderOptions(
           framesPerSecond: 30,
           pixelRatio: 1,
           useBackgroundIsolate: false,
@@ -91,7 +91,7 @@ void main() {
 
     await tester.pumpWidget(
       MotionExporterOverlay(
-        options: const WebpRecorderOptions(
+        options: const MotionRecorderOptions(
           framesPerSecond: 30,
           pixelRatio: 1,
           useBackgroundIsolate: false,
@@ -180,7 +180,7 @@ void main() {
   });
 
   test('motion clip encoder defaults to changed WebP rectangles', () async {
-    expect(const WebpRecorderOptions().trimChangedFrames, isTrue);
+    expect(const MotionRecorderOptions().trimChangedFrames, isTrue);
 
     final firstFrameBytes = _rectFrameBytes(
       width: 4,
@@ -1108,7 +1108,7 @@ void main() {
     expect(String.fromCharCodes(result.bytes.skip(8).take(4)), 'WEBP');
   });
 
-  testWidgets('stopWebp returns the format-neutral MotionRecording alias', (
+  testWidgets('stopWebp returns a format-neutral MotionRecording', (
     tester,
   ) async {
     final controller = MotionRecorderController();
@@ -1586,7 +1586,7 @@ void main() {
   });
 
   test('summarizes capture diagnostics', () {
-    const diagnostics = WebpCaptureDiagnostics(
+    const diagnostics = MotionCaptureDiagnostics(
       targetFramesPerSecond: 60,
       pixelRatio: 1,
       captureElapsed: Duration(seconds: 2),
@@ -1633,7 +1633,7 @@ void main() {
     expect(diagnostics.sampledMebibytes, closeTo(0.0687, 0.0001));
     expect(diagnostics.retainedMebibytes, closeTo(0.0610, 0.0001));
 
-    const clean = WebpCaptureDiagnostics(
+    const clean = MotionCaptureDiagnostics(
       targetFramesPerSecond: 60,
       pixelRatio: 1,
       captureElapsed: Duration(seconds: 2),
@@ -1671,7 +1671,7 @@ void main() {
     expect(clean.isNearTargetFrameRate, isTrue);
     expect(clean.isCleanCapture, isTrue);
 
-    const belowTarget = WebpCaptureDiagnostics(
+    const belowTarget = MotionCaptureDiagnostics(
       targetFramesPerSecond: 60,
       pixelRatio: 1,
       captureElapsed: Duration(seconds: 2),
@@ -1762,7 +1762,7 @@ void main() {
   });
 
   testWidgets('records a widget subtree into animated WebP', (tester) async {
-    final controller = WebpRecorderController();
+    final controller = MotionRecorderController();
 
     await tester.pumpWidget(
       Directionality(
@@ -1771,7 +1771,7 @@ void main() {
           child: SizedBox(
             width: 2,
             height: 2,
-            child: WebpRecorder(
+            child: MotionRecorder(
               controller: controller,
               child: const ColoredBox(color: Color(0x80ff0000)),
             ),
@@ -1781,7 +1781,7 @@ void main() {
     );
 
     await controller.start(
-      options: const WebpRecorderOptions(
+      options: const MotionRecorderOptions(
         framesPerSecond: 1,
         pixelRatio: 1,
         useBackgroundIsolate: false,
@@ -1819,7 +1819,7 @@ void main() {
   testWidgets('converts captured Flutter pixels to straight alpha', (
     tester,
   ) async {
-    final controller = WebpRecorderController();
+    final controller = MotionRecorderController();
 
     await tester.pumpWidget(
       Directionality(
@@ -1828,7 +1828,7 @@ void main() {
           child: SizedBox(
             width: 1,
             height: 1,
-            child: WebpRecorder(
+            child: MotionRecorder(
               controller: controller,
               child: const ColoredBox(color: Color(0x80ff0000)),
             ),
@@ -1838,7 +1838,7 @@ void main() {
     );
 
     await controller.start(
-      options: const WebpRecorderOptions(
+      options: const MotionRecorderOptions(
         pixelRatio: 1,
         useBackgroundIsolate: false,
       ),
@@ -1853,7 +1853,7 @@ void main() {
   });
 
   testWidgets('uses elapsed capture time for frame durations', (tester) async {
-    final controller = WebpRecorderController();
+    final controller = MotionRecorderController();
 
     await tester.pumpWidget(
       Directionality(
@@ -1862,7 +1862,7 @@ void main() {
           child: SizedBox(
             width: 2,
             height: 2,
-            child: WebpRecorder(
+            child: MotionRecorder(
               controller: controller,
               child: const ColoredBox(color: Color(0x80ff0000)),
             ),
@@ -1872,7 +1872,7 @@ void main() {
     );
 
     await controller.start(
-      options: const WebpRecorderOptions(
+      options: const MotionRecorderOptions(
         framesPerSecond: 1,
         pixelRatio: 1,
         collapseIdenticalFrames: false,

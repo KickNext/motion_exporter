@@ -12,6 +12,7 @@
   `MotionRecording`, raw-memory estimates, capture quality policies with
   retained-byte budget enforcement, byte/MiB estimate checks, and typed export
   errors.
+  Deprecated `WebpRecorder` aliases remain for pre-release compatibility.
   `MotionRecorderController.stopWebp` names the direct-WebP shortcut while
   `stopCapture` and `stopExport` remain the format-neutral paths.
 * Added export APIs for transparent animated WebP and APNG, including

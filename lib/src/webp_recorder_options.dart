@@ -1,9 +1,9 @@
 part of '../motion_exporter.dart';
 
-/// Capture and encoding options for [WebpRecorderController.start].
-class WebpRecorderOptions {
+/// Capture and encoding options for [MotionRecorderController.start].
+class MotionRecorderOptions {
   /// Creates recorder options.
-  const WebpRecorderOptions({
+  const MotionRecorderOptions({
     this.framesPerSecond = 30,
     this.pixelRatio = 1,
     this.loopCount = 0,

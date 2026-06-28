@@ -49,6 +49,44 @@ jobs:
       - name: Test package at lower bound
         run: flutter test --no-pub test/motion_exporter_test.dart
 
+  check-pub-version:
+    needs: check-tag
+    runs-on: ubuntu-latest
+    outputs:
+      version_exists: ${{ steps.pubdev.outputs.version_exists }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Check whether this version already exists on pub.dev
+        id: pubdev
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
+          status="$(curl -L -s -o package.json -w '%{http_code}' https://pub.dev/api/packages/motion_exporter)"
+          if [ "$status" = "404" ]; then
+            echo "version_exists=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$status" != "200" ]; then
+            echo "pub.dev package lookup failed with HTTP $status." >&2
+            exit 1
+          fi
+          export VERSION="$version"
+          python3 - <<'PY'
+          import json
+          import os
+
+          with open('package.json', encoding='utf-8') as file:
+              package = json.load(file)
+
+          version = os.environ['VERSION']
+          versions = {entry['version'] for entry in package.get('versions', [])}
+          exists = 'true' if version in versions else 'false'
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f'version_exists={exists}\n')
+          PY
+
   release_verify:
     needs: check-tag
     runs-on: ubuntu-latest
@@ -190,8 +228,10 @@ jobs:
           flutter build ios --simulator
 
   publish:
+    if: needs.check-pub-version.outputs.version_exists != 'true'
     needs:
       - check-tag
+      - check-pub-version
       - lower_bound
       - release_verify
       - linux_desktop

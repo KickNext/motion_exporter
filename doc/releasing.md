@@ -42,6 +42,18 @@ Do not push a `vX.Y.Z` tag before this is enabled. The GitHub workflow verifies
 the package, but pub.dev rejects OIDC publishing until the package exists and
 the repository/tag pattern are linked.
 
+After automated publishing is enabled, tag the manually published version so
+GitHub and pub.dev have matching release metadata:
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The publish workflow verifies the tag. If that version already exists on
+pub.dev, it skips the duplicate publish job and leaves the verification jobs as
+the release evidence.
+
 ## Later releases
 
 1. Update `version:` in `pubspec.yaml`.

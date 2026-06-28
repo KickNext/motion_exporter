@@ -49,6 +49,9 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   and WebAssembly builds, the benchmark JSON validator, and Android, iOS,
   Linux, macOS, and Windows example build smoke checks before delegating
   publishing to the official `dart-lang/setup-dart` pub.dev workflow.
+  It skips the final publish job when the tagged version already exists on
+  pub.dev, so the first manually published version can still get a matching
+  verified Git tag without a duplicate-publish failure.
   `doc/releasing.md` records the first-release sequence and points the manual
   first publish at the same local, WebAssembly, benchmark, archive, and GitHub
   platform gates.

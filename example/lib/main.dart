@@ -35,7 +35,7 @@ class MotionExporterExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'motion_exporter',
+      title: 'Motion Exporter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -426,7 +426,7 @@ class _DemoScreenState extends State<DemoScreen> {
     return Scaffold(
       backgroundColor: const Color(0xfff7f8f8),
       appBar: AppBar(
-        title: const Text('motion_exporter'),
+        title: const Text('Motion Exporter'),
         actions: [
           AnimatedBuilder(
             animation: _recorder,

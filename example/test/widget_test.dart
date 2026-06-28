@@ -6,7 +6,7 @@ void main() {
   testWidgets('renders recorder demo controls', (tester) async {
     await tester.pumpWidget(const MotionExporterExampleApp());
 
-    expect(find.text('motion_exporter'), findsOneWidget);
+    expect(find.text('Motion Exporter'), findsOneWidget);
     expect(find.text('Record loop'), findsOneWidget);
     expect(find.text('Render 120 fps'), findsOneWidget);
     expect(find.text('One loop'), findsOneWidget);

@@ -5,6 +5,8 @@
   workflows for pub.dev discovery.
 * Example native runner metadata uses package-owned reverse-DNS identifiers
   instead of Flutter template placeholders.
+* Example app titles use reader-facing Motion Exporter names instead of
+  template-style identifiers.
 * Supports Flutter `>=3.41.0` / Dart `>=3.11.0`, with lower-bound analysis and
   package tests verified on Flutter 3.41.0.
 * Added widget motion capture APIs: `MotionRecorder`,

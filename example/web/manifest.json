@@ -1,6 +1,6 @@
 {
-    "name": "motion_exporter demo",
-    "short_name": "motion_exporter",
+    "name": "Motion Exporter Demo",
+    "short_name": "Motion Exporter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

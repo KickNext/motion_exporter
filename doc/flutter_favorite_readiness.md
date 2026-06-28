@@ -15,8 +15,9 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   diagnostics.
 - `pubspec.yaml` declares a static PNG package thumbnail, while README keeps
   the animated WebP export artifact for human review.
-- `pubspec.yaml` points `homepage`, `repository`, and `issue_tracker` to the
-  public GitHub repository: https://github.com/KickNext/motion_exporter
+- `pubspec.yaml` points `homepage` to the live browser demo, with
+  `repository` and `issue_tracker` pointing to the public GitHub repository:
+  https://github.com/KickNext/motion_exporter
 - GitHub Pages serves the browser demo from the example app:
   https://kicknext.github.io/motion_exporter/
 - `pubspec.yaml` explicitly declares Android, iOS, Linux, macOS, web, and

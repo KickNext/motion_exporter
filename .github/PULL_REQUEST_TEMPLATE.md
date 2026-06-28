@@ -5,6 +5,7 @@ Describe the change and the user-facing behavior it affects.
 ## Checks
 
 - [ ] `dart format --set-exit-if-changed .`
+- [ ] `fvm spawn 3.41.0 analyze --no-pub lib test && fvm spawn 3.41.0 test --no-pub test/motion_exporter_test.dart`
 - [ ] `flutter analyze`
 - [ ] `flutter test test/motion_exporter_test.dart`
 - [ ] `cd example && flutter analyze`

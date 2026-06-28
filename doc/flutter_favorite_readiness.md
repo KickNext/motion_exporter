@@ -30,20 +30,21 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   build/web && flutter test test/widget_test.dart
   test/motion_golden_workflow_test.dart test/generate_120fps_demo_test.dart`.
 - CI is configured in `.github/workflows/ci.yml` for formatting, analyze,
-  root tests, example tests, raw golden workflow tests, package archive
-  validation, deterministic WebP demo generation, web and WebAssembly
-  compatibility, validated export benchmark JSON with WebP changed-rectangle
-  and APNG transparent-trim performance regression guards plus raw `.motion`
-  golden assertion timing, Linux, macOS, Windows, Android, and iOS example
-  build smoke checks, and `v*` release tag checks against `pubspec.yaml` and
-  `CHANGELOG.md` versions.
+  lower-bound Flutter 3.41.0 package analysis/tests, root tests, example
+  tests, raw golden workflow tests, package archive validation, deterministic
+  WebP demo generation, web and WebAssembly compatibility, validated export
+  benchmark JSON with WebP changed-rectangle and APNG transparent-trim
+  performance regression guards plus raw `.motion` golden assertion timing,
+  Linux, macOS, Windows, Android, and iOS example build smoke checks, and
+  `v*` release tag checks against `pubspec.yaml` and `CHANGELOG.md` versions.
 - CD is configured in `.github/workflows/publish.yml` for `vX.Y.Z` tags after
   the first manual pub.dev release and GitHub OIDC setup. It checks the tag
-  against `pubspec.yaml`/`CHANGELOG.md`, runs package and example verification
-  including package archive dry-run, web build, the benchmark JSON validator,
-  and Android, iOS, Linux, macOS, and Windows example build smoke checks before
-  delegating publishing to the official `dart-lang/setup-dart` pub.dev
-  workflow. `doc/releasing.md` records the first-release sequence.
+  against `pubspec.yaml`/`CHANGELOG.md`, runs lower-bound package verification,
+  package and example verification including package archive dry-run, web
+  build, the benchmark JSON validator, and Android, iOS, Linux, macOS, and
+  Windows example build smoke checks before delegating publishing to the
+  official `dart-lang/setup-dart` pub.dev workflow. `doc/releasing.md` records
+  the first-release sequence.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
 - Public GitHub CI is green on `main` for formatting, analysis, package tests,

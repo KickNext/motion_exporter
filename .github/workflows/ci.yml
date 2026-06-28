@@ -9,6 +9,26 @@ on:
       - 'v*'
 
 jobs:
+  lower_bound:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.0'
+          channel: stable
+          cache: true
+
+      - name: Install lower-bound package dependencies
+        run: flutter pub get
+
+      - name: Analyze package at lower bound
+        run: flutter analyze --no-pub lib test
+
+      - name: Test package at lower bound
+        run: flutter test --no-pub test/motion_exporter_test.dart
+
   test:
     runs-on: ubuntu-latest
     steps:

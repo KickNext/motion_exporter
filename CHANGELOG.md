@@ -72,8 +72,8 @@
   CI/publish gate, pinned macOS CI runners, and malformed `.motion` golden
   validation. Recorder and deterministic canvas entry points validate capture
   timing and pixel-ratio options at runtime instead of relying only on asserts.
-  Direct APNG/WebP encoders also validate loop-count and APNG compression
-  options before starting frame encoding.
+  Direct APNG/WebP encoders and streamed WebP exports also validate loop-count
+  and APNG compression options before starting frame encoding.
 * Kept the example app web-buildable by moving native file writes behind a
   conditional import and removed Android template placeholders from the
   packaged example metadata.

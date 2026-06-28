@@ -147,8 +147,7 @@ class WebpAnimationOptions {
     this.trimTransparentFrames = true,
     this.trimChangedFrames = false,
     this.previousFrameRetentionPolicy = WebpPreviousFrameRetentionPolicy.copy,
-  }) : assert(loopCount >= 0),
-       assert(loopCount <= 0xffff);
+  });
 
   /// Animation loop count. `0` means infinite looping.
   final int loopCount;

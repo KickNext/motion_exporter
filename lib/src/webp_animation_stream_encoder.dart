@@ -32,6 +32,7 @@ class WebpAnimationStreamEncoder {
     this.options = const WebpAnimationOptions(trimChangedFrames: true),
   }) {
     _checkVp8lSize(width, height);
+    _validateLoopCount(options.loopCount, max: 0xffff);
     _writeHeader();
   }
 

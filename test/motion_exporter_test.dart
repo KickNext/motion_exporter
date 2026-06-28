@@ -2088,6 +2088,14 @@ void main() {
         isA<RangeError>().having((error) => error.name, 'name', 'loopCount'),
       ),
     );
+    expect(
+      () => const WebpAnimationEncoder(
+        WebpAnimationOptions(loopCount: 0x10000),
+      ).encode(<MotionFrame>[frame]),
+      throwsA(
+        isA<RangeError>().having((error) => error.name, 'name', 'loopCount'),
+      ),
+    );
   });
 
   test('streams animated WebP frames through a seekable sink', () {
@@ -2152,6 +2160,22 @@ void main() {
     expect(decoder.numFrames(), 2);
     final compositedFrames = _composeAnimatedWebpFrames(bytes);
     expect(compositedFrames[1], frames[1].rgbaBytes);
+  });
+
+  test('stream WebP validates options at runtime', () {
+    final sink = _MemoryWebpAnimationSink();
+
+    expect(
+      () => WebpAnimationStreamEncoder(
+        sink: sink,
+        width: 1,
+        height: 1,
+        options: const WebpAnimationOptions(loopCount: 0x10000),
+      ),
+      throwsA(
+        isA<RangeError>().having((error) => error.name, 'name', 'loopCount'),
+      ),
+    );
   });
 
   test('stream WebP copies previous frame bytes by default', () {

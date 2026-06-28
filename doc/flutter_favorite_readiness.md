@@ -51,6 +51,9 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   `doc/releasing.md` records the first-release sequence.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
+- Dependabot is configured for root pub dependencies, example pub
+  dependencies, and GitHub Actions so dependency and workflow drift produce
+  reviewable pull requests.
 - Public GitHub CI is green on `main` for formatting, analysis, package tests,
   example web/WebAssembly, raw golden workflow, benchmark validation, package
   archive dry-run, Linux, macOS, Windows, Android, and iOS smoke builds:

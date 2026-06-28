@@ -26,6 +26,7 @@ jobs:
           fi
 
   verify:
+    needs: check-tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +57,7 @@ jobs:
           dart run tool/validate_benchmark_json.dart output/benchmark.json
 
   linux_desktop:
+    needs: check-tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,6 +80,7 @@ jobs:
           flutter build linux --release
 
   macos_desktop:
+    needs: check-tag
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,6 +98,7 @@ jobs:
           flutter build macos --release
 
   windows_desktop:
+    needs: check-tag
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -112,6 +116,7 @@ jobs:
           flutter build windows --release
 
   android:
+    needs: check-tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -133,6 +138,7 @@ jobs:
           flutter build apk --debug
 
   ios:
+    needs: check-tag
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4

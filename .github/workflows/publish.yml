@@ -27,6 +27,15 @@ jobs:
             echo "CHANGELOG.md is missing a ## $version release entry." >&2
             exit 1
           fi
+          git fetch --depth 1 origin main
+          tag_commit="$(git rev-parse HEAD)"
+          main_commit="$(git rev-parse FETCH_HEAD)"
+          if [ "$tag_commit" != "$main_commit" ]; then
+            echo "Release tag must point at origin/main." >&2
+            echo "Tag commit:  $tag_commit" >&2
+            echo "Main commit: $main_commit" >&2
+            exit 1
+          fi
 
   lower_bound:
     needs: check-tag

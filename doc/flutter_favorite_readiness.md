@@ -52,6 +52,8 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   It skips the final publish job when the tagged version already exists on
   pub.dev, so the first manually published version can still get a matching
   verified Git tag without a duplicate-publish failure.
+  Release tags must point at `origin/main`, preventing stale commits from
+  becoming published release evidence.
   `doc/releasing.md` records the first-release sequence and points the manual
   first publish at the same local, WebAssembly, benchmark, archive, and GitHub
   platform gates.

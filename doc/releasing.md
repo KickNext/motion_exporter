@@ -46,7 +46,7 @@ After automated publishing is enabled, tag the manually published version so
 GitHub and pub.dev have matching release metadata:
 
 ```sh
-git tag v0.1.0
+git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
@@ -63,6 +63,6 @@ the release evidence.
 4. Create and push the matching tag:
 
 ```sh
-git tag vX.Y.Z
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
 git push origin vX.Y.Z
 ```

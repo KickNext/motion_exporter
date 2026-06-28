@@ -1,4 +1,4 @@
-## 0.0.1
+## 0.1.0
 
 * Initial release as `motion_exporter`.
 * Package metadata describes the WebP/APNG export and raw `.motion` golden test

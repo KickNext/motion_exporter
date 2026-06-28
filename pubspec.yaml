@@ -1,6 +1,6 @@
 name: motion_exporter
 description: "Record Flutter widget animations as transparent WebP/APNG exports and raw .motion goldens for CI tests."
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/KickNext/motion_exporter
 repository: https://github.com/KickNext/motion_exporter
 issue_tracker: https://github.com/KickNext/motion_exporter/issues

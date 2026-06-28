@@ -47,6 +47,10 @@ class ApngAnimationOptions {
   final bool trimTransparentFrames;
 
   _ApngEncodeJob _toJob(List<MotionFrame> frames) {
+    _validateLoopCount(loopCount, max: 0xffffffff);
+    if (compressionLevel < 0 || compressionLevel > 9) {
+      throw RangeError.range(compressionLevel, 0, 9, 'compressionLevel');
+    }
     return _ApngEncodeJob(
       frames: frames,
       loopCount: loopCount,

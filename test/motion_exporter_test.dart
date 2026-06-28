@@ -2072,6 +2072,24 @@ void main() {
     expect(decodedSecond.getPixel(1, 1).a.toInt(), 0);
   });
 
+  test('validates direct encoder options at runtime', () {
+    final frame = MotionFrame(
+      width: 1,
+      height: 1,
+      duration: const Duration(milliseconds: 100),
+      rgbaBytes: Uint8List.fromList(<int>[0, 143, 138, 255]),
+    );
+
+    expect(
+      () => ApngAnimationEncoder(
+        ApngAnimationOptions(loopCount: 0x100000000),
+      ).encode(<MotionFrame>[frame]),
+      throwsA(
+        isA<RangeError>().having((error) => error.name, 'name', 'loopCount'),
+      ),
+    );
+  });
+
   test('streams animated WebP frames through a seekable sink', () {
     final frames = <WebpFrame>[
       WebpFrame(

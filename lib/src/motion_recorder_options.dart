@@ -92,9 +92,7 @@ class MotionRecorderOptions {
 void _validateMotionRecorderOptions(MotionRecorderOptions options) {
   _validateFramesPerSecond(options.framesPerSecond);
   _validatePixelRatio(options.pixelRatio);
-  if (options.loopCount < 0 || options.loopCount > 0xffff) {
-    throw RangeError.range(options.loopCount, 0, 0xffff, 'loopCount');
-  }
+  _validateLoopCount(options.loopCount, max: 0xffff);
   if (options.maxPendingCaptures <= 0) {
     throw ArgumentError.value(
       options.maxPendingCaptures,
@@ -188,6 +186,7 @@ class WebpAnimationOptions {
   final WebpPreviousFrameRetentionPolicy previousFrameRetentionPolicy;
 
   _EncodeJob _toJob(List<MotionFrame> frames) {
+    _validateLoopCount(loopCount, max: 0xffff);
     return _EncodeJob(
       frames: frames,
       loopCount: loopCount,
@@ -197,6 +196,12 @@ class WebpAnimationOptions {
       trimTransparentFrames: trimTransparentFrames,
       trimChangedFrames: trimChangedFrames,
     );
+  }
+}
+
+void _validateLoopCount(int loopCount, {required int max}) {
+  if (loopCount < 0 || loopCount > max) {
+    throw RangeError.range(loopCount, 0, max, 'loopCount');
   }
 }
 

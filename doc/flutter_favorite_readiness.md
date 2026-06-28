@@ -22,6 +22,9 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 - Root package gate is green locally:
   `dart format --set-exit-if-changed .`, `flutter analyze`, and
   `flutter test test/motion_exporter_test.dart`.
+- Lower-bound package gate is green locally on Flutter 3.41.0 / Dart 3.11.0:
+  `fvm spawn 3.41.0 analyze --no-pub lib test` and
+  `fvm spawn 3.41.0 test --no-pub test\motion_exporter_test.dart`.
 - Example gate is green locally:
   `cd example && flutter analyze && flutter build web --release --output
   build/web && flutter test test/widget_test.dart

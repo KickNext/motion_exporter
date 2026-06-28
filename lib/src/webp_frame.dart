@@ -78,9 +78,8 @@ class MotionClip {
   MotionClip({required List<MotionFrame> frames})
     : this._(_validatedClipFrames(frames));
 
-  MotionClip._(List<MotionFrame> frames)
-    : frames = frames,
-      duration = _clipDuration(frames),
+  MotionClip._(this.frames)
+    : duration = _clipDuration(frames),
       rawBytes = _clipRawBytes(frames);
 
   /// Raw RGBA frames in display order.

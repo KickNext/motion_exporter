@@ -132,7 +132,7 @@ class WebpAnimationStreamEncoder {
     _writeChunk('VP8X', _vp8xPayload(width, height));
     _writeChunk(
       'ANIM',
-      _animPayload(options.backgroundColor.toARGB32(), options.loopCount),
+      _animPayload(_colorToArgb32(options.backgroundColor), options.loopCount),
     );
   }
 

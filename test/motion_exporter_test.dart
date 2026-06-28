@@ -229,8 +229,8 @@ void main() {
   });
 
   test('motion export engine records deterministic WebP by default', () async {
-    final engine = MotionExportEngine(
-      encoder: const MotionClipEncoder(useBackgroundIsolate: false),
+    const engine = MotionExportEngine(
+      encoder: MotionClipEncoder(useBackgroundIsolate: false),
     );
 
     final result = await engine.recordCanvas(
@@ -678,8 +678,8 @@ void main() {
 
   testWidgets('motion export engine stops widget capture', (tester) async {
     final controller = MotionRecorderController();
-    final engine = MotionExportEngine(
-      encoder: const MotionClipEncoder(useBackgroundIsolate: false),
+    const engine = MotionExportEngine(
+      encoder: MotionClipEncoder(useBackgroundIsolate: false),
     );
 
     await tester.pumpWidget(
@@ -1615,9 +1615,9 @@ void main() {
   testWidgets('records deterministic canvas motion clips', (tester) async {
     final clip = await tester.runAsync(
       () =>
-          MotionCanvasRecorder(
-            size: const Size(2, 2),
-            duration: const Duration(seconds: 1),
+          const MotionCanvasRecorder(
+            size: Size(2, 2),
+            duration: Duration(seconds: 1),
             framesPerSecond: 10,
           ).record((canvas, size, progress, elapsed) {
             canvas.drawRect(
@@ -1887,7 +1887,7 @@ void main() {
     expect(_asciiAt(bytes, 8, 4), 'WEBP');
     expect(_topLevelChunks(bytes), <String>['VP8X', 'ANIM', 'ANMF', 'ANMF']);
 
-    final vp8xPayloadOffset = 12 + 8;
+    const vp8xPayloadOffset = 12 + 8;
     expect(bytes[vp8xPayloadOffset], 0x12);
 
     final decoder = img.WebPDecoder(bytes);

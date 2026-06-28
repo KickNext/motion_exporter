@@ -103,7 +103,7 @@ class _WebpRecorderState extends State<WebpRecorder>
       final job = _EncodeJob(
         frames: clip.frames,
         loopCount: options.loopCount,
-        backgroundArgb: options.backgroundColor.toARGB32(),
+        backgroundArgb: _colorToArgb32(options.backgroundColor),
         frameBlend: options.frameBlend,
         frameDispose: options.frameDispose,
         trimTransparentFrames: options.trimTransparentFrames,

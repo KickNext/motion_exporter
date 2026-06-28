@@ -159,11 +159,16 @@ class WebpAnimationOptions {
     return _EncodeJob(
       frames: frames,
       loopCount: loopCount,
-      backgroundArgb: backgroundColor.toARGB32(),
+      backgroundArgb: _colorToArgb32(backgroundColor),
       frameBlend: frameBlend,
       frameDispose: frameDispose,
       trimTransparentFrames: trimTransparentFrames,
       trimChangedFrames: trimChangedFrames,
     );
   }
+}
+
+int _colorToArgb32(ui.Color color) {
+  // ignore: deprecated_member_use
+  return color.value;
 }

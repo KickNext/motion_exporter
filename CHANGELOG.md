@@ -73,7 +73,9 @@
   validation. Recorder and deterministic canvas entry points validate capture
   timing and pixel-ratio options at runtime instead of relying only on asserts.
   Direct APNG/WebP encoders and streamed WebP exports also validate loop-count
-  and APNG compression options before starting frame encoding.
+  and APNG compression options before starting frame encoding. Public entrypoint
+  libraries are named, with dartdoc configured to focus generated API docs on
+  `motion_exporter` and `motion_exporter_io`.
 * Kept the example app web-buildable by moving native file writes behind a
   conditional import and removed Android template placeholders from the
   packaged example metadata.

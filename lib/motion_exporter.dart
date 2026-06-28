@@ -1,5 +1,6 @@
 /// Flutter widget motion capture, deterministic rendering, and export APIs.
-library;
+// ignore: unnecessary_library_name
+library motion_exporter;
 
 import 'dart:async';
 import 'dart:math' as math;

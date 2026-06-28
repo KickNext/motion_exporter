@@ -71,12 +71,15 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   on 2026-06-28.
 - `git status --short --branch` is clean on `main`, with the local branch
   tracking `origin/main`.
+- Public entrypoint libraries are named and `dartdoc_options.yaml` limits
+  generated API docs to `motion_exporter` and `motion_exporter_io`.
 - `pana . --no-warning` on Flutter 3.44.1 / Dart 3.12.1 with `pana 0.23.12`
   currently scores 140/160 locally on Windows: static analysis, dependencies,
   platform support, README, CHANGELOG, license, and example are green.
 - `dart doc --dry-run` fails locally with the same `RangeError` in
   `DocumentationComment._stripDocImports` that `pana` reports, so the lost
-  dartdoc score is reproducible outside `pana`. Upstream tracking issue:
+  dartdoc score is reproducible outside `pana` even after local docs are
+  narrowed to the two public entrypoints. Upstream tracking issue:
   https://github.com/dart-lang/dartdoc/issues/4180
 - `example/tool/benchmark_exports.dart` and
   `example/tool/validate_benchmark_json.dart` pass locally on 2026-06-28, and
@@ -87,7 +90,8 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 
 - `dartdoc` 9.0.4/9.0.5 currently crashes while precaching Flutter SDK
   comments that use `@docImport`. This costs the dartdoc-comments score even
-  though package analysis is clean.
+  though package analysis is clean and local `dartdoc_options.yaml` narrows the
+  package docs to public entrypoints.
 - Local Windows `pana` cannot fully validate screenshots without WebP CLI
   tools. Adding the cached `cwebp.exe` to `PATH` reduces the local screenshot
   error text, but `webpinfo` is still required. The pubspec thumbnail is PNG,

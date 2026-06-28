@@ -1,0 +1,4 @@
+dartdoc:
+  include:
+    - motion_exporter
+    - motion_exporter_io

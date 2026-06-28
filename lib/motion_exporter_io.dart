@@ -1,5 +1,6 @@
 /// Native filesystem helpers for streamed WebP exports and raw motion goldens.
-library;
+// ignore: unnecessary_library_name
+library motion_exporter_io;
 
 import 'dart:io';
 import 'dart:typed_data';

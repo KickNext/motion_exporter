@@ -2940,6 +2940,71 @@ void main() {
     expect(compositedFrames[1], frames[1].rgbaBytes);
   });
 
+  test('trims transparent APNG frames from unaligned RGBA buffers', () {
+    final frames = <MotionFrame>[
+      MotionFrame(
+        width: 2,
+        height: 2,
+        duration: const Duration(milliseconds: 80),
+        rgbaBytes: _unalignedBytes(
+          Uint8List.fromList(<int>[
+            255,
+            0,
+            0,
+            255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]),
+        ),
+      ),
+      MotionFrame(
+        width: 2,
+        height: 2,
+        duration: const Duration(milliseconds: 80),
+        rgbaBytes: _unalignedBytes(
+          Uint8List.fromList(<int>[
+            0,
+            0,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+          ]),
+        ),
+      ),
+    ];
+
+    final bytes = const ApngAnimationEncoder().encode(frames);
+    final controls = _pngFrameControls(bytes);
+
+    expect(controls, hasLength(2));
+    expect(
+      controls.last,
+      const _PngFrameControl(width: 1, height: 1, x: 1, y: 0),
+    );
+    expect(_composeAnimatedPngFrames(bytes)[1], frames[1].rgbaBytes);
+  });
+
   test('can disable transparent APNG frame trimming', () {
     final frames = <MotionFrame>[
       MotionFrame(

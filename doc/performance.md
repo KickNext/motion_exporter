@@ -14,13 +14,13 @@ Measured with:
 
 | Case | Format | Size | Encode |
 | --- | --- | ---: | ---: |
-| Raw `.motion` golden | `.motion` | 17287.0 KiB | 165.9 ms |
-| Raw `.motion` compare | `.motion` | same | 25.8 ms |
-| WebP default changed rect | WebP | 5087.7 KiB | 3286.3 ms |
-| WebP transparent trim | WebP | 5087.2 KiB | 3594.8 ms |
-| WebP full canvas | WebP | 5196.6 KiB | 7934.8 ms |
-| APNG transparent trim | APNG | 5302.4 KiB | 348.9 ms |
-| APNG full canvas | APNG | 5746.3 KiB | 399.5 ms |
+| Raw `.motion` golden | `.motion` | 17287.0 KiB | 144.2 ms |
+| Raw `.motion` compare | `.motion` | same | 19.6 ms |
+| WebP default changed rect | WebP | 5087.7 KiB | 2645.5 ms |
+| WebP transparent trim | WebP | 5087.2 KiB | 2861.9 ms |
+| WebP full canvas | WebP | 5196.6 KiB | 6277.3 ms |
+| APNG transparent trim | APNG | 5302.4 KiB | 267.2 ms |
+| APNG full canvas | APNG | 5746.3 KiB | 313.9 ms |
 
 The default WebP encoder is about 2.4x faster than full-canvas WebP for this
 scene because it writes only changed rectangles after the first frame. APNG is

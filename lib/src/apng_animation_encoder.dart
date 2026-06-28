@@ -381,22 +381,13 @@ img.Image _imageForRect(MotionFrame frame, _FrameRect rect) {
     return _pngImageFromFrame(frame);
   }
 
-  final cropped = Uint8List(rect.width * rect.height * 4);
-  for (var y = 0; y < rect.height; y++) {
-    final srcStart = ((rect.y + y) * frame.width + rect.x) * 4;
-    final dstStart = y * rect.width * 4;
-    cropped.setRange(
-      dstStart,
-      dstStart + rect.width * 4,
-      frame.rgbaBytes,
-      srcStart,
-    );
-  }
-
   return img.Image.fromBytes(
     width: rect.width,
     height: rect.height,
-    bytes: cropped.buffer,
+    bytes: frame.rgbaBytes.buffer,
+    bytesOffset:
+        frame.rgbaBytes.offsetInBytes + ((rect.y * frame.width + rect.x) * 4),
+    rowStride: frame.width * 4,
     numChannels: 4,
     order: img.ChannelOrder.rgba,
   );

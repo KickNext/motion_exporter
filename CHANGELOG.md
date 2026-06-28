@@ -27,8 +27,9 @@
 * Added deterministic rendering APIs: `MotionCanvasRecorder`,
   `MotionExportEngine.recordCanvasClip`, `MotionExportEngine.recordCanvas`,
   `MotionClip.withDuration`, and `MotionClip.withoutDuplicateFrames` for exact
-  animation clocks and lean preview exports, with integer clip-duration
-  accumulation.
+  animation clocks and lean preview exports, integer clip-duration
+  accumulation, and one-copy cropped frame images for transparent APNG plus
+  transparent/changed-rectangle WebP exports.
 * Added loop-oriented workflows: `MotionLoopSignal`,
   `MotionRecorderController.recordNextLoop`, `recordNextLoopClip`, cancellable
   boundary waits, timeout cleanup, duplicate loop-closure trimming, and

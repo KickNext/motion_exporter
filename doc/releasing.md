@@ -3,7 +3,8 @@
 ## First pub.dev release
 
 Automated publishing only works for existing pub.dev packages. Publish the
-first version manually from a clean `main` checkout:
+first version manually from a clean `main` checkout after the latest GitHub
+`main` CI run is green:
 
 ```sh
 dart format --set-exit-if-changed .
@@ -14,6 +15,7 @@ flutter test test/motion_exporter_test.dart
 cd example
 flutter analyze
 flutter build web --release --output build/web
+flutter build web --wasm --release --output build/web_wasm
 flutter test test/widget_test.dart test/motion_golden_workflow_test.dart test/generate_120fps_demo_test.dart
 MOTION_EXPORTER_BENCHMARK_JSON=output/benchmark.json flutter test tool/benchmark_exports.dart --reporter expanded
 dart run tool/validate_benchmark_json.dart output/benchmark.json
@@ -21,6 +23,9 @@ cd ..
 dart pub publish --dry-run
 dart pub publish
 ```
+
+Use GitHub CI for the platform smoke builds before the first publish:
+Android, iOS simulator, Linux, macOS, Windows, web, and WebAssembly.
 
 Prefer publishing under a verified publisher before requesting Flutter
 Favorite review.
@@ -41,7 +46,8 @@ the repository/tag pattern are linked.
 
 1. Update `version:` in `pubspec.yaml`.
 2. Add a matching `## X.Y.Z` entry in `CHANGELOG.md`.
-3. Wait for `main` CI to pass, including the lower-bound job.
+3. Wait for `main` CI to pass, including lower-bound, benchmark, package
+   archive, WebAssembly, and platform smoke jobs.
 4. Create and push the matching tag:
 
 ```sh

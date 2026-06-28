@@ -48,7 +48,9 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   and WebAssembly builds, the benchmark JSON validator, and Android, iOS,
   Linux, macOS, and Windows example build smoke checks before delegating
   publishing to the official `dart-lang/setup-dart` pub.dev workflow.
-  `doc/releasing.md` records the first-release sequence.
+  `doc/releasing.md` records the first-release sequence and points the manual
+  first publish at the same local, WebAssembly, benchmark, archive, and GitHub
+  platform gates.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
 - Dependabot is configured for root pub dependencies, example pub

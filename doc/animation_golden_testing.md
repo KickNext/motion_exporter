@@ -81,7 +81,9 @@ flutter test test/spinner_golden_test.dart
 
 When `failureArtifactsDirectory` is set, a mismatch writes `actual`,
 `expected`, and `diff` PNG files for the first comparable failing frame. Upload
-that directory from CI when the test fails.
+that directory from CI when the test fails. The package CI uses
+`actions/upload-artifact` for `build/motion_failures` and
+`example/build/motion_failures`.
 
 ## Why raw goldens
 

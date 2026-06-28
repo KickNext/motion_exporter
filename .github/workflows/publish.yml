@@ -78,6 +78,16 @@ jobs:
           MOTION_EXPORTER_BENCHMARK_JSON=output/benchmark.json flutter test tool/benchmark_exports.dart --reporter expanded
           dart run tool/validate_benchmark_json.dart output/benchmark.json
 
+      - name: Upload motion golden failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: motion-golden-failures-${{ github.run_id }}
+          path: |
+            build/motion_failures
+            example/build/motion_failures
+          if-no-files-found: ignore
+
   linux_desktop:
     needs: check-tag
     runs-on: ubuntu-latest

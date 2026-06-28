@@ -25,6 +25,10 @@ void main() {
     );
 
     await expectMotionClipGolden(actual: clip, file: file, update: true);
-    await expectMotionClipGolden(actual: clip, file: file);
+    await expectMotionClipGolden(
+      actual: clip,
+      file: file,
+      failureArtifactsDirectory: Directory('build/motion_failures'),
+    );
   });
 }

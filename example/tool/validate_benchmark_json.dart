@@ -7,8 +7,8 @@ void main(List<String> args) {
   }
 
   final root = jsonDecode(File(args.single).readAsStringSync());
-  if (root is! Map<String, Object?> || root['schemaVersion'] != 3) {
-    _fail('Expected benchmark schemaVersion 3.');
+  if (root is! Map<String, Object?> || root['schemaVersion'] != 4) {
+    _fail('Expected benchmark schemaVersion 4.');
   }
 
   final environment = _map(root, 'environment');
@@ -120,6 +120,12 @@ void main(List<String> args) {
     max: _positiveInt(rows['APNG transparent trim']!, 'encodeMicros'),
     maxName: 'APNG transparent trim encodeMicros',
   );
+
+  final ratios = _map(root, 'ratios');
+  _expectRatioAtMost(ratios, key: 'motionEncodeToWebpDefault', max: 1);
+  _expectRatioAtMost(ratios, key: 'motionCompareToWebpDefault', max: 1);
+  _expectRatioAtMost(ratios, key: 'apngTransparentEncodeToWebpDefault', max: 1);
+  _expectRatioAtMost(ratios, key: 'webpChangedRectEncodeToFullCanvas', max: 1);
 }
 
 Map<String, Object?> _map(Map<String, Object?> source, String key) {
@@ -190,6 +196,17 @@ void _expectValueAtMost({
 }) {
   if (value > max) {
     _fail('$valueName must not exceed $maxName.');
+  }
+}
+
+void _expectRatioAtMost(
+  Map<String, Object?> ratios, {
+  required String key,
+  required num max,
+}) {
+  final value = _positiveNum(ratios, key);
+  if (value > max) {
+    _fail('$key must not exceed $max.');
   }
 }
 

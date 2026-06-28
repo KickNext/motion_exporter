@@ -220,8 +220,13 @@ Map<String, Object?> _benchmarkJson(
   required _GoldenBenchmarkRow golden,
   required MotionClip clip,
 }) {
+  final byName = {for (final row in rows) row.name: row};
+  final webpDefault = byName['WebP default changed rect']!;
+  final webpFullCanvas = byName['WebP full canvas']!;
+  final apngTransparent = byName['APNG transparent trim']!;
+
   return <String, Object?>{
-    'schemaVersion': 3,
+    'schemaVersion': 4,
     'environment': <String, Object?>{
       'dartVersion': Platform.version,
       'operatingSystem': Platform.operatingSystem,
@@ -238,6 +243,20 @@ Map<String, Object?> _benchmarkJson(
     },
     'golden': golden.toJson(),
     'results': rows.map((row) => row.toJson()).toList(growable: false),
+    'ratios': <String, Object?>{
+      'motionEncodeToWebpDefault':
+          golden.encodeDuration.inMicroseconds /
+          webpDefault.encodeDuration.inMicroseconds,
+      'motionCompareToWebpDefault':
+          golden.compareDuration.inMicroseconds /
+          webpDefault.encodeDuration.inMicroseconds,
+      'apngTransparentEncodeToWebpDefault':
+          apngTransparent.encodeDuration.inMicroseconds /
+          webpDefault.encodeDuration.inMicroseconds,
+      'webpChangedRectEncodeToFullCanvas':
+          webpDefault.encodeDuration.inMicroseconds /
+          webpFullCanvas.encodeDuration.inMicroseconds,
+    },
   };
 }
 

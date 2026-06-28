@@ -39,7 +39,8 @@ https://docs.flutter.dev/packages-and-plugins/favorites
   benchmark JSON with WebP changed-rectangle and APNG transparent-trim
   performance regression guards plus raw `.motion` golden assertion timing,
   Linux, macOS, Windows, Android, and iOS example build smoke checks, and
-  `v*` release tag checks against `pubspec.yaml` and `CHANGELOG.md` versions.
+  `v*` release tag checks against `pubspec.yaml`, `CHANGELOG.md`, and
+  `origin/main`.
 - `doc/performance.md` records a reproducible local benchmark snapshot and the
   recommended split between raw `.motion` goldens and WebP/APNG review exports.
 - CD is configured in `.github/workflows/publish.yml` for `vX.Y.Z` tags after

@@ -37,9 +37,10 @@ https://docs.flutter.dev/packages-and-plugins/favorites
 - CD is configured in `.github/workflows/publish.yml` for `vX.Y.Z` tags after
   the first manual pub.dev release and GitHub OIDC setup. It checks the tag
   against `pubspec.yaml`/`CHANGELOG.md`, runs package and example verification
-  including package archive dry-run, web build, and the benchmark JSON
-  validator, then delegates publishing to the official `dart-lang/setup-dart`
-  pub.dev workflow. `doc/releasing.md` records the first-release sequence.
+  including package archive dry-run, web build, the benchmark JSON validator,
+  and Android, iOS, Linux, macOS, and Windows example build smoke checks before
+  delegating publishing to the official `dart-lang/setup-dart` pub.dev
+  workflow. `doc/releasing.md` records the first-release sequence.
 - GitHub project intake has a security policy, bug report issue form, and PR
   checklist aligned with the local CI gate.
 - Public GitHub CI is green on `main` for formatting, analysis, package tests,

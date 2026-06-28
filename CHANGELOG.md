@@ -50,8 +50,8 @@
   a static PNG thumbnail for pub.dev package presentation.
 * Improved package hygiene with archive ignores for generated Flutter files,
   strict analyzer options, root/example/web/WebAssembly CI, tag-driven pub.dev
-  publish automation, Linux/Windows desktop and Android example build CI,
-  explicit pub.dev platform metadata, GitHub intake templates, and malformed
-  `.motion` golden validation.
+  publish automation gated by Android, iOS, Linux, macOS, and Windows example
+  build smoke checks, explicit pub.dev platform metadata, GitHub intake
+  templates, and malformed `.motion` golden validation.
 * Kept the example app web-buildable by moving native file writes behind a
   conditional import.

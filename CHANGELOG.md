@@ -13,6 +13,7 @@
   retained-byte budget enforcement, byte/MiB estimate checks, and typed export
   errors.
   Deprecated `WebpRecorder` aliases remain for pre-release compatibility.
+  Internal recorder source files use the canonical `MotionRecorder` naming.
   `MotionRecorderController.stopWebp` names the direct-WebP shortcut while
   `stopCapture` and `stopExport` remain the format-neutral paths.
 * Added export APIs for transparent animated WebP and APNG, including

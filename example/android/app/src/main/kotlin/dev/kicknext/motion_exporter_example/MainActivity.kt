@@ -1,4 +1,4 @@
-package com.example.motion_exporter_example
+package dev.kicknext.motion_exporter_example
 
 import io.flutter.embedding.android.FlutterActivity
 

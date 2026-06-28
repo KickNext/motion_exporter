@@ -66,4 +66,5 @@
   CI/publish gate, pinned macOS CI runners, and malformed `.motion` golden
   validation.
 * Kept the example app web-buildable by moving native file writes behind a
-  conditional import.
+  conditional import and removed Android template placeholders from the
+  packaged example metadata.

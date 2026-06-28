@@ -8,7 +8,7 @@
 PRODUCT_NAME = motion_exporter_example
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.webpRecorderExample
+PRODUCT_BUNDLE_IDENTIFIER = dev.kicknext.motion-exporter-example
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 KickNext. All rights reserved.

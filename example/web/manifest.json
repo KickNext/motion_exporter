@@ -1,11 +1,11 @@
 {
-    "name": "motion_exporter_example",
-    "short_name": "motion_exporter_example",
+    "name": "motion_exporter demo",
+    "short_name": "motion_exporter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Record Flutter motion and export transparent WebP/APNG animations.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -5,6 +5,8 @@
 `motion_exporter` records an animated Flutter widget subtree and exports motion
 formats with transparent pixels preserved.
 
+Browser demo: https://kicknext.github.io/motion_exporter/
+
 ![Transparent animated Flutter motion exported as WebP](screenshots/transparent_orbit.webp)
 
 The package captures a `RepaintBoundary` as raw straight-alpha RGBA frames,

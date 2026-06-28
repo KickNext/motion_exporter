@@ -65,6 +65,7 @@ class _MotionRecorderState extends State<MotionRecorder>
     if (_sessionActive) {
       throw StateError('Motion recording is already active.');
     }
+    _validateMotionRecorderOptions(options);
 
     _sessionId++;
     _sessionActive = true;

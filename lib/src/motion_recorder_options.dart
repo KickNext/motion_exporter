@@ -83,8 +83,40 @@ class MotionRecorderOptions {
   final bool trimChangedFrames;
 
   Duration get _frameDuration {
+    _validateFramesPerSecond(framesPerSecond);
     final micros = (Duration.microsecondsPerSecond / framesPerSecond).round();
     return Duration(microseconds: micros);
+  }
+}
+
+void _validateMotionRecorderOptions(MotionRecorderOptions options) {
+  _validateFramesPerSecond(options.framesPerSecond);
+  _validatePixelRatio(options.pixelRatio);
+  if (options.loopCount < 0 || options.loopCount > 0xffff) {
+    throw RangeError.range(options.loopCount, 0, 0xffff, 'loopCount');
+  }
+  if (options.maxPendingCaptures <= 0) {
+    throw ArgumentError.value(
+      options.maxPendingCaptures,
+      'maxPendingCaptures',
+      'Pending capture limit must be positive.',
+    );
+  }
+}
+
+void _validateFramesPerSecond(int framesPerSecond) {
+  if (framesPerSecond < 1 || framesPerSecond > 240) {
+    throw RangeError.range(framesPerSecond, 1, 240, 'framesPerSecond');
+  }
+}
+
+void _validatePixelRatio(double pixelRatio) {
+  if (pixelRatio <= 0 || !pixelRatio.isFinite) {
+    throw ArgumentError.value(
+      pixelRatio,
+      'pixelRatio',
+      'Pixel ratio must be finite and positive.',
+    );
   }
 }
 

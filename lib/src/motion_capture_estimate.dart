@@ -48,6 +48,7 @@ class MotionCaptureEstimate {
         'Capture duration must be positive.',
       );
     }
+    _validateMotionRecorderOptions(options);
 
     return MotionCaptureEstimate(
       logicalSize: logicalSize,

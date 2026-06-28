@@ -123,6 +123,8 @@ class MotionCanvasRecorder {
         'Clip duration must be positive.',
       );
     }
+    _validateFramesPerSecond(framesPerSecond);
+    _validatePixelRatio(pixelRatio);
   }
 }
 

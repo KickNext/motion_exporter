@@ -1061,6 +1061,39 @@ void main() {
     expect(unevenEstimate.rawBytes, 8);
   });
 
+  test('capture preflight rejects non-finite pixel ratios', () async {
+    expect(
+      () => MotionCaptureEstimate.forWidget(
+        logicalSize: const Size(8, 8),
+        duration: const Duration(milliseconds: 100),
+        options: MotionRecorderOptions(pixelRatio: double.infinity),
+      ),
+      throwsA(
+        isA<ArgumentError>().having(
+          (error) => error.name,
+          'name',
+          'pixelRatio',
+        ),
+      ),
+    );
+
+    await expectLater(
+      const MotionCanvasRecorder(
+        size: Size.square(8),
+        duration: Duration(milliseconds: 100),
+        framesPerSecond: 10,
+        pixelRatio: double.infinity,
+      ).record((canvas, size, progress, elapsed) {}),
+      throwsA(
+        isA<ArgumentError>().having(
+          (error) => error.name,
+          'name',
+          'pixelRatio',
+        ),
+      ),
+    );
+  });
+
   testWidgets('records through the format-neutral MotionRecorder API', (
     tester,
   ) async {
@@ -1305,6 +1338,36 @@ void main() {
     expect(result.frameCount, 1);
     expect(result.validation, isNotNull);
     expect(result.validation!.isValid, isTrue);
+  });
+
+  testWidgets('recorder rejects non-finite pixel ratios before starting', (
+    tester,
+  ) async {
+    final controller = MotionRecorderController();
+
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: MotionRecorder(
+          controller: controller,
+          child: const SizedBox(width: 8, height: 8),
+        ),
+      ),
+    );
+
+    await expectLater(
+      controller.start(
+        options: MotionRecorderOptions(pixelRatio: double.infinity),
+      ),
+      throwsA(
+        isA<ArgumentError>().having(
+          (error) => error.name,
+          'name',
+          'pixelRatio',
+        ),
+      ),
+    );
+    expect(controller.isRecording, isFalse);
   });
 
   testWidgets('records the next logical loop as a raw clip', (tester) async {

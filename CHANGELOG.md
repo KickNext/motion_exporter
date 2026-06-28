@@ -70,7 +70,8 @@
   metadata, GitHub intake templates, Dependabot maintenance for pub packages
   and GitHub Actions, first-publish release guidance aligned with the full
   CI/publish gate, pinned macOS CI runners, and malformed `.motion` golden
-  validation.
+  validation. Recorder and deterministic canvas entry points validate capture
+  timing and pixel-ratio options at runtime instead of relying only on asserts.
 * Kept the example app web-buildable by moving native file writes behind a
   conditional import and removed Android template placeholders from the
   packaged example metadata.

@@ -7,8 +7,17 @@ first version manually from a clean `main` checkout:
 
 ```sh
 dart format --set-exit-if-changed .
+fvm spawn 3.41.0 analyze --no-pub lib test
+fvm spawn 3.41.0 test --no-pub test/motion_exporter_test.dart
 flutter analyze
 flutter test test/motion_exporter_test.dart
+cd example
+flutter analyze
+flutter build web --release --output build/web
+flutter test test/widget_test.dart test/motion_golden_workflow_test.dart test/generate_120fps_demo_test.dart
+MOTION_EXPORTER_BENCHMARK_JSON=output/benchmark.json flutter test tool/benchmark_exports.dart --reporter expanded
+dart run tool/validate_benchmark_json.dart output/benchmark.json
+cd ..
 dart pub publish --dry-run
 dart pub publish
 ```
@@ -32,7 +41,7 @@ the repository/tag pattern are linked.
 
 1. Update `version:` in `pubspec.yaml`.
 2. Add a matching `## X.Y.Z` entry in `CHANGELOG.md`.
-3. Wait for `main` CI to pass.
+3. Wait for `main` CI to pass, including the lower-bound job.
 4. Create and push the matching tag:
 
 ```sh

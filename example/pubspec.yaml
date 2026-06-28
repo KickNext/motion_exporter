@@ -1,5 +1,5 @@
 name: motion_exporter_example
-description: "Demonstrates recording a transparent Flutter animation to WebP."
+description: "Demonstrates transparent WebP/APNG exports and raw motion goldens."
 publish_to: 'none'
 version: 1.0.0+1
 

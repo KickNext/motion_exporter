@@ -1,7 +1,7 @@
 # motion_exporter example
 
 Interactive Flutter demo for recording a transparent animated widget and
-exporting it to WebP.
+exporting it to WebP/APNG, with a raw `.motion` golden workflow for tests.
 
 ```sh
 flutter run -d windows
@@ -12,6 +12,9 @@ two loop-boundary signals, saves the resulting WebP to a temporary directory,
 and plays the encoded WebP bytes in the output panel. The live loop button uses
 `recordNextLoop` with a cancel signal, so canceling the wait or active capture
 does not leave a background recorder task running.
+
+Use the format selector in the app to switch preview exports between WebP and
+APNG. Use `.motion` files for automated assertions.
 
 Use `Render 120 fps` to export the demo motion scene from deterministic
 timestamps instead of the live window vsync. The generated WebP has 240 frames
